@@ -145,6 +145,14 @@ export default function ProductPage({ params }: Props) {
                 Buy Now
               </Link>
             )}
+            {user?.token && user?.role === 'admin' && (
+              <Link
+                href={`/adminDashboard/product?pid=${pid}`}
+                className="md:w-full m-2 bg-red-500 hover:bg-red-600 text-white rounded-md p-2 text-center"
+              >
+                Edit this product
+              </Link>
+            )}
             {addedToCart && (
               <Link
                 href="/cart"

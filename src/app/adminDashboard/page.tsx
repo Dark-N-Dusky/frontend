@@ -7,6 +7,7 @@ import Link from 'next/link';
 import {
   ShoppingCartTwoTone,
   KeyboardReturnTwoTone,
+  Inventory2,
 } from '@mui/icons-material';
 
 export default function adminDashboard() {
@@ -34,6 +35,10 @@ export default function adminDashboard() {
         <Link href="/adminDashboard/return" className={btnClass}>
           <KeyboardReturnTwoTone sx={{ fontSize: 50 }} />
           View Returns
+        </Link>
+        <Link href="/adminDashboard/product" className={btnClass}>
+          <Inventory2 sx={{ fontSize: 50 }} />
+          Create Product
         </Link>
       </div>
     </div>
