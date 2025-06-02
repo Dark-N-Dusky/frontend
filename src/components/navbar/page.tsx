@@ -65,7 +65,7 @@ const Navbar = () => {
                 Shop Now
               </Link>
             </li>
-            {user && (
+            {user && user?.role !== 'admin' && (
               <li>
                 <Link
                   href="/cart"
