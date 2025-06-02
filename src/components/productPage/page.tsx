@@ -79,22 +79,33 @@ export default function ProductPage({
           {name}
         </p>
         <p>{description.match(/(.*?[.!?])\s/)?.[1] || description}</p>
-        {!addedToCart && (
-          <button
-            className="border-orange-400 border w-full p-3 my-2 mt-8 rounded-md hover:bg-orange-400 hover:text-black"
-            onClick={handleAddToCart}
-            id={pid}
-          >
-            Add to Cart
-          </button>
-        )}
-        {addedToCart && (
+        {user?.role === 'admin' ? (
           <Link
-            href="/cart"
-            className="border-green-400 block text-center border w-full p-3 my-2 mt-8 rounded-md hover:bg-green-400 hover:text-black"
+            href={`/adminDashboard/product?pid=${pid}`}
+            className="border-blue-400 block text-center border w-full p-3 my-2 mt-8 rounded-md hover:bg-blue-400 hover:text-black"
           >
-            View Cart
+            Edit Product
           </Link>
+        ) : (
+          <>
+            {!addedToCart && (
+              <button
+                className="border-orange-400 border w-full p-3 my-2 mt-8 rounded-md hover:bg-orange-400 hover:text-black"
+                onClick={handleAddToCart}
+                id={pid}
+              >
+                Add to Cart
+              </button>
+            )}
+            {addedToCart && (
+              <Link
+                href="/cart"
+                className="border-green-400 block text-center border w-full p-3 my-2 mt-8 rounded-md hover:bg-green-400 hover:text-black"
+              >
+                View Cart
+              </Link>
+            )}
+          </>
         )}
       </div>
     </div>

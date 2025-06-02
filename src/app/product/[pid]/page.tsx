@@ -100,6 +100,27 @@ export default function ProductPage({ params }: Props) {
     }
   };
 
+  const handleDeleteProduct = async () => {
+    if (confirm('Are you sure you want to delete this product?')) {
+      try {
+        const res = await axios.delete(`${api}/admin/products/${pid}`, {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        });
+        if (res.status === 200) {
+          alert('Product deleted successfully.');
+          router.push('/product');
+        } else {
+          alert('Failed to delete product.');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Error deleting product.');
+      }
+    }
+  };
+
   if (loading) {
     return <div className="text-white p-5">Loading...</div>;
   }
@@ -129,37 +150,50 @@ export default function ProductPage({ params }: Props) {
           <p className="text-2xl pb-1 border-b">&#8377;{product.offer_price}</p>
           <p className="my-4">{product.description}</p>
           <div className="flex flex-col md:flex-row">
-            {!addedToCart && (
-              <button
-                className="md:w-full m-2 border border-orange-400 p-2 rounded-md hover:bg-orange-400 hover:text-black"
-                onClick={handleAddToCart}
-              >
-                Add To Cart
-              </button>
+            {user?.role !== 'admin' && (
+              <>
+                {!addedToCart && (
+                  <button
+                    className="md:w-full m-2 border border-orange-400 p-2 rounded-md hover:bg-orange-400 hover:text-black"
+                    onClick={handleAddToCart}
+                  >
+                    Add To Cart
+                  </button>
+                )}
+                {!addedToCart && (
+                  <Link
+                    href={`/cart/checkout?pid=${pid}`}
+                    className="md:w-full m-2 bg-orange-400 hover:bg-orange-500 text-black rounded-md p-2 text-center"
+                  >
+                    Buy Now
+                  </Link>
+                )}
+                {addedToCart && (
+                  <Link
+                    href="/cart"
+                    className="w-full border mb-2 mt-3 border-green-400 p-2 rounded-md hover:bg-green-400 hover:text-black text-center"
+                  >
+                    View Cart
+                  </Link>
+                )}
+              </>
             )}
-            {!addedToCart && (
-              <Link
-                href={`/cart/checkout?pid=${pid}`}
-                className="md:w-full m-2 bg-orange-400 hover:bg-orange-500 text-black rounded-md p-2 text-center"
-              >
-                Buy Now
-              </Link>
-            )}
-            {user?.token && user?.role === 'admin' && (
-              <Link
-                href={`/adminDashboard/product?pid=${pid}`}
-                className="md:w-full m-2 bg-red-500 hover:bg-red-600 text-white rounded-md p-2 text-center"
-              >
-                Edit this product
-              </Link>
-            )}
-            {addedToCart && (
-              <Link
-                href="/cart"
-                className="w-full border mb-2 mt-3 border-green-400 p-2 rounded-md hover:bg-green-400 hover:text-black text-center"
-              >
-                View Cart
-              </Link>
+
+            {user?.role === 'admin' && (
+              <>
+                <button
+                  className="md:w-full m-2 bg-red-500 hover:bg-red-600 text-white rounded-md p-2 text-center"
+                  onClick={handleDeleteProduct}
+                >
+                  Delete Product
+                </button>
+                <Link
+                  href={`/adminDashboard/product?pid=${pid}`}
+                  className="md:w-full m-2 bg-orange-500 hover:bg-orange-600 text-white rounded-md p-2 text-center"
+                >
+                  Edit this product
+                </Link>
+              </>
             )}
           </div>
           <div className="flex flex-col md:flex-row w-full justify-stretch items-center md:pt-4 pt-2">
@@ -201,32 +235,34 @@ export default function ProductPage({ params }: Props) {
         </div>
       </div>
       <div className="p-4">
-        <div className="flex flex-col md:flex-row">
-          {!addedToCart && (
-            <button
-              className="md:w-full border mb-2 md:me-4 md:m-0 border-orange-400 p-2 rounded-md hover:bg-orange-400 hover:text-black cursor-pointer"
-              onClick={handleAddToCart}
-            >
-              Add To Cart
-            </button>
-          )}
-          {!addedToCart && (
-            <Link
-              href={`/cart/checkout?pid=${pid}`}
-              className="md:w-full text-center md:m-0 my-4 mt-2 bg-orange-400 hover:bg-orange-500 text-black rounded-md p-2 cursor-pointer"
-            >
-              Buy Now
-            </Link>
-          )}
-          {addedToCart && (
-            <Link
-              href="/cart"
-              className="w-full border mb-2 md:m-0 border-green-400 p-2 rounded-md hover:bg-green-400 hover:text-black text-center"
-            >
-              View Cart
-            </Link>
-          )}
-        </div>
+        {user?.role !== 'admin' && (
+          <div className="flex flex-col md:flex-row">
+            {!addedToCart && (
+              <button
+                className="md:w-full border mb-2 md:me-4 md:m-0 border-orange-400 p-2 rounded-md hover:bg-orange-400 hover:text-black cursor-pointer"
+                onClick={handleAddToCart}
+              >
+                Add To Cart
+              </button>
+            )}
+            {!addedToCart && (
+              <Link
+                href={`/cart/checkout?pid=${pid}`}
+                className="md:w-full text-center md:m-0 my-4 mt-2 bg-orange-400 hover:bg-orange-500 text-black rounded-md p-2 cursor-pointer"
+              >
+                Buy Now
+              </Link>
+            )}
+            {addedToCart && (
+              <Link
+                href="/cart"
+                className="w-full border mb-2 md:m-0 border-green-400 p-2 rounded-md hover:bg-green-400 hover:text-black text-center"
+              >
+                View Cart
+              </Link>
+            )}
+          </div>
+        )}
         <Link
           href="/product"
           className="text-lg font-semibold text-center bg-zinc-600 hover:bg-zinc-700 p-3 rounded-md md:my-4 inline-block w-full"
