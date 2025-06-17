@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState, useRef } from 'react';
 import { CurrencyRupeeTwoTone } from '@mui/icons-material';
 import axios from 'axios';
 import { useAuth } from '@/app/context/authContext';
@@ -10,29 +10,30 @@ import { GET_PRODUCT } from '@/queries/getProductDetails';
 
 function ManageProductPageComponent() {
   const params = useSearchParams();
-  const pid = useMemo(
-    () => params.get('pid')?.toLowerCase().toString() || '',
-    [params]
-  );
+  const pid = useMemo(() => params.get('pid')?.toLowerCase() || '', [params]);
   const router = useRouter();
 
   const [formData, setFormData] = useState({
     name: '',
     category: '',
-    rating: 0.0,
-    images: [''],
+    top_points: 0.0,
+    images: [] as File[],
     description: '',
     price: 0.0,
     offer: 0.0,
     detail: '',
-    gallery: [''],
+    gallery: [] as File[],
   });
 
-  const [imagesInput, setImagesInput] = useState('');
-  const [galleryInput, setGalleryInput] = useState('');
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [galleryPreviews, setGalleryPreviews] = useState<string[]>([]);
   const [isLoadingProduct, setIsLoadingProduct] = useState(!!pid);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const api = process.env.NEXT_PUBLIC_API || 'localhost';
+  const imageInputRef = useRef<HTMLInputElement>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
+
+  const api = process.env.NEXT_PUBLIC_API || 'http://localhost:5000';
   const { user, loading } = useAuth();
 
   useEffect(() => {
@@ -47,25 +48,24 @@ function ManageProductPageComponent() {
 
           const product = data?.product;
           if (product) {
-            setFormData({
+            setFormData((prev) => ({
+              ...prev,
               name: product.name || '',
               category: product.category || '',
-              rating: parseFloat(product.top_points || 0),
-              images: product.media || [],
+              top_points: parseFloat(product.top_points) || 0,
               description: product.description || '',
               price: parseFloat(product.price || 0),
               offer: parseFloat(product.offer_price || 0),
               detail: product.details || '',
-              gallery: (product.gallery || []).map(
-                (g: { image_url: string }) => g.image_url
-              ),
-            });
-            setImagesInput((product.media || []).join(', '));
-            setGalleryInput(
-              (product.gallery || [])
-                .map((g: { image_url: string }) => g.image_url)
-                .join(', ')
+            }));
+
+            const imgUrls = product.media || [];
+            const galleryUrls = (product.gallery || []).map(
+              (g: { image_url: string }) => g.image_url
             );
+
+            setImagePreviews(imgUrls);
+            setGalleryPreviews(galleryUrls);
           }
         } catch (err) {
           console.error('Failed to load product:', err);
@@ -83,32 +83,29 @@ function ManageProductPageComponent() {
   ) => {
     const { name, value } = e.target;
 
-    if (name === 'images') {
-      setImagesInput(value);
-      setFormData((prev) => ({
-        ...prev,
-        images: value
-          .split(',')
-          .map((url) => url.trim())
-          .filter(Boolean),
-      }));
-    } else if (name === 'gallery') {
-      setGalleryInput(value);
-      setFormData((prev) => ({
-        ...prev,
-        gallery: value
-          .split(',')
-          .map((url) => url.trim())
-          .filter(Boolean),
-      }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]:
+        name === 'top_points' || name === 'price' || name === 'offer'
+          ? parseFloat(value)
+          : value,
+    }));
+  };
+
+  const handleFileDrop = (
+    type: 'images' | 'gallery',
+    files: FileList | null
+  ) => {
+    if (!files) return;
+    const fileArray = Array.from(files);
+    const previewUrls = fileArray.map((file) => URL.createObjectURL(file));
+
+    if (type === 'images') {
+      setFormData((prev) => ({ ...prev, images: fileArray }));
+      setImagePreviews(previewUrls);
     } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]:
-          name === 'rating' || name === 'price' || name === 'offer'
-            ? parseFloat(value)
-            : value,
-      }));
+      setFormData((prev) => ({ ...prev, gallery: fileArray }));
+      setGalleryPreviews(previewUrls);
     }
   };
 
@@ -116,27 +113,33 @@ function ManageProductPageComponent() {
     e.preventDefault();
     if (user?.token && !loading) {
       try {
-        const payload = {
-          name: formData.name,
-          category: formData.category,
-          media: formData.images,
-          description: formData.description,
-          price: formData.price,
-          offer_price: formData.offer,
-          details: formData.detail,
-          top_points: formData.rating.toString(),
-          gallery: formData.gallery.map((url) => ({ image_url: url })),
-        };
+        setIsSubmitting(true);
+
+        const form = new FormData();
+
+        form.append('name', formData.name);
+        form.append('category', formData.category);
+        form.append('top_points', formData.top_points.toString());
+        form.append('description', formData.description);
+        form.append('price', formData.price.toString());
+        form.append('offer_price', formData.offer.toString());
+        form.append('details', formData.detail);
+
+        formData.images.forEach((file) => form.append('media', file));
+        formData.gallery.forEach((file) => form.append('gallery', file));
 
         const url = pid
           ? `${api}/admin/products/${pid}`
           : `${api}/admin/products`;
-
         const method = pid ? 'put' : 'post';
 
-        const res = await axios[method](url, payload, {
+        const res = await axios({
+          method,
+          url,
+          data: form,
           headers: {
             Authorization: `Bearer ${user?.token}`,
+            'Content-Type': 'multipart/form-data',
           },
         });
 
@@ -150,6 +153,9 @@ function ManageProductPageComponent() {
         }
       } catch (err) {
         console.error('Error submitting form:', err);
+        alert('Some error occurred');
+      } finally {
+        setIsSubmitting(false);
       }
     }
   };
@@ -161,25 +167,39 @@ function ManageProductPageComponent() {
 
   const handleReset = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-
     setFormData({
       name: '',
       category: '',
-      rating: 0.0,
-      images: [''],
+      top_points: 0.0,
+      images: [],
       description: '',
       price: 0.0,
       offer: 0.0,
       detail: '',
-      gallery: [''],
+      gallery: [],
     });
-    setImagesInput('');
-    setGalleryInput('');
+    setImagePreviews([]);
+    setGalleryPreviews([]);
   };
 
   const inputClassName =
     'text-black my-2 px-2 py-1 rounded-md w-full focus:outline-none';
   const inputDivClassName = 'inline-block w-full text-left my-2';
+  const dropzoneClass =
+    'w-full border border-dashed border-white rounded-md p-4 my-2 text-sm text-gray-300 text-center cursor-pointer';
+
+  const renderImagePreviews = (previews: string[]) => (
+    <div className="flex gap-2 flex-wrap mt-2">
+      {previews.map((src, idx) => (
+        <img
+          key={idx}
+          src={src}
+          alt={`preview-${idx}`}
+          className="w-20 h-20 object-cover rounded"
+        />
+      ))}
+    </div>
+  );
 
   if (isLoadingProduct) {
     return (
@@ -191,20 +211,17 @@ function ManageProductPageComponent() {
     <div className="bg-neutral-800 text-white px-4 py-8 flex justify-center">
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col justify-center items-center bg-black p-4 w-max rounded-lg shadow-md"
+        className="flex flex-col justify-center items-center bg-black p-4 w-max max-w-screen-md rounded-lg shadow-md"
       >
         <h1 className="text-3xl font-semibold m-2 mb-4 text-center">
           {pid ? 'Edit Product' : 'Create New Product'}
         </h1>
 
         <div className={inputDivClassName}>
-          <label htmlFor="name" className="block">
-            Product Name
-          </label>
+          <label htmlFor="name">Product Name</label>
           <input
             type="text"
             name="name"
-            id="name"
             value={formData.name}
             onChange={handleChange}
             className={inputClassName}
@@ -218,7 +235,6 @@ function ManageProductPageComponent() {
           <input
             type="text"
             name="category"
-            id="category"
             value={formData.category}
             onChange={handleChange}
             className={inputClassName}
@@ -227,37 +243,48 @@ function ManageProductPageComponent() {
         </div>
 
         <div className={inputDivClassName}>
-          <label htmlFor="rating">Rating</label>
+          <label htmlFor="top_points">Rating</label>
           <input
             type="number"
             step="0.1"
-            name="rating"
-            id="rating"
-            value={formData.rating}
+            name="top_points"
+            value={formData.top_points}
             onChange={handleChange}
             className={inputClassName}
             placeholder="4.5"
           />
         </div>
 
+        {/* IMAGES Upload */}
         <div className={inputDivClassName}>
-          <label htmlFor="images">Images</label>
-          <input
-            type="text"
-            name="images"
-            id="images"
-            value={imagesInput}
-            onChange={handleChange}
-            className={inputClassName}
-            placeholder="url1, url2, url3"
-          />
+          <label>Product Images</label>
+          <div
+            className={dropzoneClass}
+            onClick={() => imageInputRef.current?.click()}
+            onDrop={(e) => {
+              e.preventDefault();
+              handleFileDrop('images', e.dataTransfer.files);
+            }}
+            onDragOver={(e) => e.preventDefault()}
+          >
+            Drag & drop or click to upload product images
+            <input
+              ref={imageInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              className="hidden"
+              onChange={(e) => handleFileDrop('images', e.target.files)}
+            />
+          </div>
+          {renderImagePreviews(imagePreviews)}
         </div>
 
+        {/* DESCRIPTION */}
         <div className={inputDivClassName}>
           <label htmlFor="description">Short Description</label>
           <textarea
             name="description"
-            id="description"
             value={formData.description}
             onChange={handleChange}
             className={inputClassName}
@@ -266,6 +293,7 @@ function ManageProductPageComponent() {
           />
         </div>
 
+        {/* PRICE */}
         <div className={inputDivClassName}>
           <label htmlFor="price">Original Price</label>
           <span className={`${inputClassName} flex items-center bg-white`}>
@@ -274,7 +302,6 @@ function ManageProductPageComponent() {
               type="number"
               step="0.01"
               name="price"
-              id="price"
               value={formData.price}
               onChange={handleChange}
               className="focus:outline-none w-full"
@@ -291,7 +318,6 @@ function ManageProductPageComponent() {
               type="number"
               step="0.01"
               name="offer"
-              id="offer"
               value={formData.offer}
               onChange={handleChange}
               className="focus:outline-none w-full"
@@ -304,7 +330,6 @@ function ManageProductPageComponent() {
           <label htmlFor="detail">Detailed Description</label>
           <textarea
             name="detail"
-            id="detail"
             value={formData.detail}
             onChange={handleChange}
             className={inputClassName}
@@ -313,26 +338,44 @@ function ManageProductPageComponent() {
           />
         </div>
 
+        {/* GALLERY Upload */}
         <div className={inputDivClassName}>
-          <label htmlFor="gallery">Gallery</label>
-          <input
-            type="text"
-            name="gallery"
-            id="gallery"
-            value={galleryInput}
-            onChange={handleChange}
-            className={inputClassName}
-            placeholder="url1, url2"
-          />
+          <label>Gallery Images</label>
+          <div
+            className={dropzoneClass}
+            onClick={() => galleryInputRef.current?.click()}
+            onDrop={(e) => {
+              e.preventDefault();
+              handleFileDrop('gallery', e.dataTransfer.files);
+            }}
+            onDragOver={(e) => e.preventDefault()}
+          >
+            Drag & drop or click to upload gallery images
+            <input
+              ref={galleryInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              className="hidden"
+              onChange={(e) => handleFileDrop('gallery', e.target.files)}
+            />
+          </div>
+          {renderImagePreviews(galleryPreviews)}
         </div>
 
         <div className="flex flex-row-reverse">
           <button
             type="submit"
-            className="m-2 bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded"
+            disabled={isSubmitting}
+            className={`m-2 px-4 py-2 rounded ${
+              isSubmitting
+                ? 'bg-orange-300 cursor-not-allowed'
+                : 'bg-orange-500 hover:bg-orange-600'
+            }`}
           >
-            {pid ? 'Save' : 'Submit'}
+            {isSubmitting ? 'Loading...' : pid ? 'Save' : 'Submit'}
           </button>
+
           <button
             className={`${
               pid
@@ -349,7 +392,7 @@ function ManageProductPageComponent() {
   );
 }
 
-export default function productPage() {
+export default function ProductPage() {
   return (
     <Suspense fallback={<p>Loading...</p>}>
       <ManageProductPageComponent />
