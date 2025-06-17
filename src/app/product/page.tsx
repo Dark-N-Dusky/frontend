@@ -18,7 +18,10 @@ interface Product {
 }
 
 function SearchComponent() {
-  const { data, loading, error } = useQuery(GET_PRODUCTS, { client });
+  const { data, loading, error } = useQuery(GET_PRODUCTS, {
+    client,
+    fetchPolicy: 'no-cache',
+  });
   const searchParams = useSearchParams();
   const router = useRouter();
 

@@ -70,6 +70,7 @@ export default function Order({
           const { data } = await client.query({
             query: GET_PRODUCT_DETAILS,
             variables: { pid: item.product_id },
+            fetchPolicy: 'no-cache',
           });
           return {
             ...data.product,

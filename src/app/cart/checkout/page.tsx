@@ -143,6 +143,7 @@ function CheckoutClient() {
           client.query({
             query: GET_PRODUCT_PRICE,
             variables: { pid: item.product_id },
+            fetchPolicy: 'no-cache',
           })
         );
 

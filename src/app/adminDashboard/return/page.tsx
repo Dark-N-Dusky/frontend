@@ -61,6 +61,7 @@ export default function AdminDashboard() {
       const { data } = await client.query({
         query: GET_RETURN_DETAILS,
         variables: { pid: returnItem.productItemId, uid: returnItem.uid },
+        fetchPolicy: 'no-cache',
       });
 
       setReturnDetails({

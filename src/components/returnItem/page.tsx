@@ -23,6 +23,7 @@ export default function ReturnItem({
     client,
     variables: { pid: productId },
     skip: !productId,
+    fetchPolicy: 'no-cache',
   });
 
   const [imgSrc, setImgSrc] = useState<string | undefined>(undefined);

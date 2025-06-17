@@ -21,6 +21,7 @@ export default function CartItem({ productId, quantity }: CartItemProps) {
     client,
     variables: { pid: productId },
     skip: !productId,
+    fetchPolicy: 'no-cache',
   });
 
   const [imgSrc, setImgSrc] = useState<string | undefined>(undefined);

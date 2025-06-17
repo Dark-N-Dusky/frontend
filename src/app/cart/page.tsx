@@ -19,6 +19,7 @@ export default function Cart() {
     client,
     variables: { uid: user?.uid },
     skip: !user?.uid,
+    fetchPolicy: 'no-cache',
   });
 
   useEffect(() => {
@@ -45,6 +46,7 @@ export default function Cart() {
           client.query({
             query: GET_PRODUCT_PRICE,
             variables: { pid: item.product_id },
+            fetchPolicy: 'no-cache',
           })
       );
 

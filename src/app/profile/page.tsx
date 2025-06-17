@@ -37,6 +37,7 @@ export default function Profile() {
       },
     },
     skip: !user?.token || !user?.uid,
+    fetchPolicy: 'no-cache',
   });
 
   useEffect(() => {
