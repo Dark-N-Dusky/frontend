@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Carousel from '@/components/carousel/page';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import ProductPage from '@/components/productPage/page';
+import ReviewsList from '@/components/customerReview';
 
 const showStoppers = [
   {
@@ -170,7 +171,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="luxury p-4 backdrop-brightness-50 bg-[url(/portrait-wood.jpg)] md:bg-[url(/landscape-wood.jpg)]">
+      <div className="luxury p-4 backdrop-brightness-50 bg-[url(https://res.cloudinary.com/dn3jc0m8s/image/upload/v1750235529/portrait-wood_zcx7c6.jpg)] md:bg-[url(https://res.cloudinary.com/dn3jc0m8s/image/upload/v1750235528/landscape-wood_tveu1g.jpg)]">
         <p className="text-white text-center text-3xl font-semibold pb-2">
           Luxurious Fineness
         </p>
@@ -259,26 +260,7 @@ export default function Home() {
           Customer Satisfaction
         </p>
         <div className="p-5 flex flex-row flex-wrap justify-center gap-5 w-full">
-          {reviews.map((i) => (
-            <div
-              key={i.name}
-              className="min-w-60 h-96 bg-slate-50 rounded-lg flex-col flex max-w-64 bg-[url(/avng.jpg)] bg-cover"
-            >
-              <Image
-                src={i.image}
-                alt={i.name}
-                height={100}
-                width={100}
-                className="rounded-full h-36 w-36 my-5 mx-14"
-              />
-              <p className="text-center text-lg font-bold">{i.name}</p>
-              <p className="p-2 text-center">{i.review}</p>
-              <p className="text-center">
-                Rating: <span className="font-semibold">{i.rating}</span> out of
-                5
-              </p>
-            </div>
-          ))}
+          <ReviewsList reviews={reviews} />
         </div>
       </div>
       <div className="bg-slate-50 flex flex-col md:flex-row items-center">

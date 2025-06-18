@@ -23,9 +23,9 @@ export default function PDFGeneratorWithForms({
   productDetails,
 }: PDFProps) {
   const generatePDF = async () => {
-    const existingPdfBytes = await fetch('/invoice_template.pdf').then((res) =>
-      res.arrayBuffer()
-    );
+    const existingPdfBytes = await fetch(
+      'https://res.cloudinary.com/dn3jc0m8s/image/upload/v1750241145/invoice_template_f5yex1.pdf'
+    ).then((res) => res.arrayBuffer());
     const pdfDoc = await PDFDocument.load(existingPdfBytes);
     const form = pdfDoc.getForm();
     const date = new Date();

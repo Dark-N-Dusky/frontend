@@ -20,7 +20,7 @@ const Navbar = () => {
           className="flex items-center space-x-3 rtl:space-x-reverse"
         >
           <Image
-            src="/logo_short_white.png"
+            src="https://res.cloudinary.com/dn3jc0m8s/image/upload/v1750235529/logo_short_white_qhkbqc.png"
             alt="Logo"
             width={60}
             height={35}
