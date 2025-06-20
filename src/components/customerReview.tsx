@@ -16,6 +16,7 @@ function ReviewCard({ review }: { review: Review }) {
   return (
     <div className="min-w-60 h-96 bg-slate-50 rounded-lg flex-col flex max-w-64 bg-[url(/avng.jpg)] bg-cover">
       <Image
+        unoptimized
         src={imgSrc}
         alt={review.name}
         height={100}

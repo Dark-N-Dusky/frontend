@@ -37,6 +37,7 @@ const Carousel = ({ images, divHeightNormal, divHeightMd }: CarouselProps) => {
     >
       {images.map((item, index) => (
         <Image
+          unoptimized
           key={index}
           src={item}
           className={`absolute top-0 left-0 w-full h-full object-cover transition-all duration-500 rounded-l-2xl transform ${

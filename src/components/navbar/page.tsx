@@ -24,6 +24,7 @@ const Navbar = () => {
             alt="Logo"
             width={60}
             height={35}
+            unoptimized
           />
           <span className="text-white text-2xl font-semibold">
             Dark & Dusky

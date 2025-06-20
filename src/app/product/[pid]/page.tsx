@@ -225,6 +225,7 @@ export default function ProductPage({ params }: Props) {
         <div className="flex flex-col md:flex-row w-full flex-wrap justify-center items-center">
           {product.gallery.map((item: any, index: number) => (
             <Image
+              unoptimized
               alt={`Image-${index}`}
               src={item.image_url}
               height={500}

@@ -120,6 +120,7 @@ export default function Home() {
         <div className="flex justify-around flex-wrap">
           <Link href="/product" className="m-6">
             <Image
+              unoptimized
               className="rounded-full mb-2 border-[0.3rem] border-white"
               src="/belt2-5.jpg"
               alt="Product - Belt"
@@ -130,6 +131,7 @@ export default function Home() {
           </Link>
           <Link href="/product" className="m-6">
             <Image
+              unoptimized
               className="rounded-full mb-2 border-[0.3rem] border-white"
               src="/belt2-5.jpg"
               alt="Product - Belt"
@@ -140,6 +142,7 @@ export default function Home() {
           </Link>
           <Link href="/product" className="m-6">
             <Image
+              unoptimized
               className="rounded-full mb-2 border-[0.3rem] border-white"
               src="/belt2-5.jpg"
               alt="Product - Belt"
@@ -150,6 +153,7 @@ export default function Home() {
           </Link>
           <Link href="/product" className="m-6">
             <Image
+              unoptimized
               className="rounded-full mb-2 border-[0.3rem] border-white"
               src="/belt2-5.jpg"
               alt="Product - Belt"
@@ -160,6 +164,7 @@ export default function Home() {
           </Link>
           <Link href="/product" className="m-6">
             <Image
+              unoptimized
               className="rounded-full mb-2 border-[0.3rem] border-white"
               src="/belt2-5.jpg"
               alt="Product - Belt"
@@ -178,6 +183,7 @@ export default function Home() {
 
         <div className="flex flex-col md:flex-row shadow-xl bg-black m-4 text-white rounded-lg">
           <Image
+            unoptimized
             src="/leather-belts.webp"
             className="rounded-lg"
             alt=""
@@ -207,6 +213,7 @@ export default function Home() {
 
         <div className="flex flex-col md:flex-row shadow-xl bg-black m-4 text-white rounded-lg">
           <Image
+            unoptimized
             src="/women-handbag.jpg"
             className="rounded-lg"
             alt=""

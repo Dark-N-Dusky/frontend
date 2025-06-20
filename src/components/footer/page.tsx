@@ -12,6 +12,7 @@ const Footer = () => {
           <div className="mb-6 md:mb-0">
             <Link href="/" className="flex items-center">
               <Image
+                unoptimized
                 src="https://res.cloudinary.com/dn3jc0m8s/image/upload/v1750235529/logo_short_white_qhkbqc.png"
                 className="h-8 me-3"
                 alt="Dark & Dusky Logo"

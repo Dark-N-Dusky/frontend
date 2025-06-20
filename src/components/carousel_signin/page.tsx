@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import Image from "next/image";
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 const images = [
-  "/xyz (1).jpeg",
-  "/xyz (2).jpeg",
-  "/xyz (3).jpeg",
-  "/xyz (4).jpeg",
+  '/xyz (1).jpeg',
+  '/xyz (2).jpeg',
+  '/xyz (3).jpeg',
+  '/xyz (4).jpeg',
 ];
 
 const Carousel = () => {
@@ -37,10 +37,13 @@ const Carousel = () => {
     <div className="relative h-[110vh] mx-auto rounded-l-2xl overflow-hidden bg-gray-100">
       {images.map((item, index) => (
         <Image
+          unoptimized
           key={index}
           src={item}
           className={`absolute top-0 left-0 w-full h-full object-cover transition-all duration-500 rounded-l-2xl transform ${
-            current === index ? "translate-x-0 opacity-100" : "translate-x-10 opacity-0"
+            current === index
+              ? 'translate-x-0 opacity-100'
+              : 'translate-x-10 opacity-0'
           }`}
           alt="Dark & Dusky Logo"
           width={450}

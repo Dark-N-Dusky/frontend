@@ -97,6 +97,7 @@ export default function Profile() {
     <div className="flex flex-col md:flex-row bg-neutral-800 text-white w-full">
       <div className="flex flex-col bg-black items-center p-4 m-2 rounded-md md:rounded-none md:m-0 md:w-1/5">
         <Image
+          unoptimized
           src={
             profile.profile_url ||
             `https://avatar.iran.liara.run/username?username=${profile.name}`
