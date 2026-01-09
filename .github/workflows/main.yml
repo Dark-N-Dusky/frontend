@@ -22,9 +22,9 @@ jobs:
           cache: npm
 
       # 3️⃣ Create production env file (baked into build)
-      - name: Create .env.production
+      - name: Create .env
         run: |
-          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > .env.production
+          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > .env
 
       # 4️⃣ Install deps (CI only)
       - name: Install dependencies
