@@ -1,0 +1,66 @@
+name: Deploy Next.js Frontend to EC2
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2️⃣ Setup Node
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      # 3️⃣ Create production env file (baked into build)
+      - name: Create .env.production
+        run: |
+          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > .env.production
+
+      # 4️⃣ Install deps (CI only)
+      - name: Install dependencies
+        run: npm ci
+
+      # 5️⃣ Build Next.js (env baked here)
+      - name: Build Next.js
+        run: npm run build
+
+      # 6️⃣ Prune dev deps
+      - name: Prune dev dependencies
+        run: npm prune --omit=dev
+
+      # 7️⃣ Sanity check
+      - name: Verify build output
+        run: |
+          ls -la
+          ls -la .next
+
+      # 8️⃣ Copy frontend to EC2
+      - name: Copy frontend to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: .next,public,node_modules,package.json,package-lock.json
+          target: /home/ubuntu/frontend
+
+      # 9️⃣ Reload frontend (PM2, zero downtime)
+      - name: Reload frontend PM2
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ubuntu/frontend
+            /home/ubuntu/.nvm/versions/node/v24.11.1/bin/pm2 reload frontend
