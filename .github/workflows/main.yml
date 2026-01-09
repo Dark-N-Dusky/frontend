@@ -24,7 +24,7 @@ jobs:
       # 3️⃣ Create production env file (baked into build)
       - name: Create .env
         run: |
-          echo "NEXT_PUBLIC_API=${{ secrets.NEXT_PUBLIC_API_URL }}" > .env
+          echo "NEXT_PUBLIC_API=https://darkanddusky.com/api/" > .env
 
       # 4️⃣ Install deps (CI only)
       - name: Install dependencies
