@@ -26,7 +26,7 @@ const Footer = () => {
               Dark & Dusky is a fashion brand that offers a wide range of
               genuine leather products.
             </p>
-            <p className="text-white my-2">Email: dzinternational7@gmail.com</p>
+            <p className="text-white my-2">Email: contactus@darkanddusky.com</p>
           </div>
 
           <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">

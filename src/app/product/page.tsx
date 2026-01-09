@@ -78,7 +78,7 @@ function SearchComponent() {
         className="mb-4 p-2 border border-gray-300 rounded w-full bg-black text-white"
       />
 
-      <div className="flex flex-row flex-wrap w-full md:w-full p-3">
+      <div className="flex flex-row flex-wrap w-full md:w-full p-3 justify-center">
         {filteredProducts.map((product: any, index: number) => (
           <ProductPage
             key={product.pid}

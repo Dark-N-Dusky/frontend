@@ -11,19 +11,19 @@ export default function ContactUs() {
         <div className={cardClass}>
           <p className="font-semibold">Email address</p>
           <Link
-            href="mailto:dzinternational7@gmail.com"
+            href="mailto:contactus@darkanddusky.com"
             className="hover:underline-offset-2 hover:underline"
           >
-            dzinternational7@gmail.com
+            contactus@darkanddusky.com
           </Link>
         </div>
         <div className={cardClass}>
           <p className="font-semibold">Contact Number</p>
           <Link
-            href="tel:1234567890"
+            href="tel:9389626822"
             className="hover:underline-offset-2 hover:underline"
           >
-            1234567890
+            9389626822
           </Link>
         </div>
         <div className={cardClass}>

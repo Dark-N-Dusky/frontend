@@ -71,7 +71,12 @@ export default function ProductPage({
       />
       <div className="p-5">
         <p className="text-2xl">&#8377; {offer_price}</p>
-        <p className="line-through text-gray-400">&#8377; {price}</p>
+        <p>
+          <span className="line-through text-gray-400">&#8377; {price} </span>
+          <span className="ms-2 text-lg bg-green-800 px-1 rounded">
+            {(((price - offer_price) / price) * 100).toFixed(0) + '%'}
+          </span>
+        </p>
         <p
           className="text-xl cursor-pointer"
           onClick={() => router.push(`/product/${pid}`)}
