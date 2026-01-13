@@ -1,13 +1,11 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import Image from "next/image";
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 const images = [
-  "/xyz (1).jpeg",
-  "/xyz (2).jpeg",
-  "/xyz (3).jpeg",
-  "/xyz (4).jpeg",
+  'https://res.cloudinary.com/dn3jc0m8s/image/upload/v1768320897/sale2_bjoz0k.png',
+  'https://res.cloudinary.com/dn3jc0m8s/image/upload/v1768321035/sale1_p3oune.png',
 ];
 
 const Carousel = () => {
@@ -40,7 +38,9 @@ const Carousel = () => {
           key={index}
           src={item}
           className={`absolute top-0 left-0 w-full h-full object-cover transition-all duration-500 rounded-l-2xl transform ${
-            current === index ? "translate-x-0 opacity-100" : "translate-x-10 opacity-0"
+            current === index
+              ? 'translate-x-0 opacity-100'
+              : 'translate-x-10 opacity-0'
           }`}
           alt="Dark & Dusky Logo"
           width={450}

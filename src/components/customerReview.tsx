@@ -14,7 +14,7 @@ function ReviewCard({ review }: { review: Review }) {
   const [imgSrc, setImgSrc] = useState(review.image);
 
   return (
-    <div className="min-w-60 h-96 bg-slate-50 rounded-lg flex-col flex max-w-64 bg-[url(/avng.jpg)] bg-cover">
+    <div className="min-w-60 h-96 bg-slate-50 rounded-lg flex-col flex max-w-64 bg-[url(https://res.cloudinary.com/dn3jc0m8s/image/upload/v1768321363/img_hfdzwb.jpg)] bg-cover">
       <Image
         src={imgSrc}
         alt={review.name}

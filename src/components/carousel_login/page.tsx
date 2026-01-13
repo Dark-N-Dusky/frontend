@@ -4,10 +4,8 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
 const images = [
-  '/xyz (1).jpeg',
-  '/xyz (2).jpeg',
-  '/xyz (3).jpeg',
-  '/xyz (4).jpeg',
+  'https://res.cloudinary.com/dn3jc0m8s/image/upload/v1768320897/sale2_bjoz0k.png',
+  'https://res.cloudinary.com/dn3jc0m8s/image/upload/v1768321035/sale1_p3oune.png',
 ];
 
 const Carousel = () => {
@@ -34,7 +32,7 @@ const Carousel = () => {
   };
 
   return (
-    <div className="relative h-[80vh] mx-auto rounded-l-2xl overflow-hidden bg-gray-100">
+    <div className="relative h-[80vh] mx-auto rounded-l-2xl overflow-hidden bg-gray-900">
       {images.map((item, index) => (
         <Image
           key={index}

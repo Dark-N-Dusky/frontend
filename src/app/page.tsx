@@ -9,9 +9,7 @@ const showStoppers = [
   {
     pid: 'ghghghghgh',
     name: 'Leather Belts',
-    media: [
-      'https://media.croma.com/image/upload/v1730269823/Croma%20Assets/Communication/Headphones%20and%20Earphones/Images/303746_0_tnxfm9.png',
-    ],
+    media: ['/belt2-5.jpg'],
     description: 'Genuine leather belt for men',
     price: 999,
     offer_price: 499,
@@ -105,7 +103,12 @@ const reviews = [
 ];
 
 export default function Home() {
-  const images = ['/belt2-5.jpg', '/avng.jpg'];
+  const images = [
+    'https://res.cloudinary.com/dn3jc0m8s/image/upload/v1768318740/img2_pap23w.png',
+    'https://res.cloudinary.com/dn3jc0m8s/image/upload/v1768318689/img4_bc38dl.png',
+    'https://res.cloudinary.com/dn3jc0m8s/image/upload/v1768318687/img3_l4yhnk.png',
+    'https://res.cloudinary.com/dn3jc0m8s/image/upload/v1768318735/img1_b087do.png',
+  ];
   return (
     <div className="w-full overflow-x-hidden bg-black">
       <Carousel images={images} divHeightMd="150vh" divHeightNormal="80vh" />
@@ -118,7 +121,27 @@ export default function Home() {
           Top Categories
         </p>
         <div className="flex justify-around flex-wrap">
-          <Link href="/product" className="m-6">
+          <Link href="/product?s=belt" className="m-6">
+            <Image
+              className="rounded-full mb-2 border-[0.3rem] border-white"
+              src="https://res.cloudinary.com/dn3jc0m8s/image/upload/v1768319126/belt2-5_kpybbh.jpg"
+              alt="Product - Belt"
+              height={180}
+              width={180}
+            />
+            <p className="text-center text-lg">Belts</p>
+          </Link>
+          <Link href="/product?s=wallet" className="m-6">
+            <Image
+              className="rounded-full mb-2 border-[0.3rem] border-white"
+              src="https://res.cloudinary.com/dn3jc0m8s/image/upload/v1768319481/p1_aw071p.png"
+              alt="Product - Wallet"
+              height={180}
+              width={180}
+            />
+            <p className="text-center text-lg">Wallets</p>
+          </Link>
+          {/* <Link href="/product" className="m-6">
             <Image
               className="rounded-full mb-2 border-[0.3rem] border-white"
               src="/belt2-5.jpg"
@@ -137,32 +160,12 @@ export default function Home() {
               width={180}
             />
             <p className="text-center text-lg">Belts</p>
-          </Link>
+          </Link> */}
           <Link href="/product" className="m-6">
             <Image
               className="rounded-full mb-2 border-[0.3rem] border-white"
-              src="/belt2-5.jpg"
-              alt="Product - Belt"
-              height={180}
-              width={180}
-            />
-            <p className="text-center text-lg">Belts</p>
-          </Link>
-          <Link href="/product" className="m-6">
-            <Image
-              className="rounded-full mb-2 border-[0.3rem] border-white"
-              src="/belt2-5.jpg"
-              alt="Product - Belt"
-              height={180}
-              width={180}
-            />
-            <p className="text-center text-lg">Belts</p>
-          </Link>
-          <Link href="/product" className="m-6">
-            <Image
-              className="rounded-full mb-2 border-[0.3rem] border-white"
-              src="/belt2-5.jpg"
-              alt="Product - Belt"
+              src="https://res.cloudinary.com/dn3jc0m8s/image/upload/v1768319366/leather-products_jambcv.jpg"
+              alt="Product - All"
               height={180}
               width={180}
             />
@@ -178,7 +181,7 @@ export default function Home() {
 
         <div className="flex flex-col md:flex-row shadow-xl bg-black m-4 text-white rounded-lg">
           <Image
-            src="/leather-belts.webp"
+            src="https://res.cloudinary.com/dn3jc0m8s/image/upload/v1768320624/belts_eibpgp.png"
             className="rounded-lg"
             alt=""
             width={500}
@@ -207,10 +210,10 @@ export default function Home() {
 
         <div className="flex flex-col md:flex-row shadow-xl bg-black m-4 text-white rounded-lg">
           <Image
-            src="/women-handbag.jpg"
+            src="https://res.cloudinary.com/dn3jc0m8s/image/upload/v1768320640/purses_otjz1h.png"
             className="rounded-lg"
             alt=""
-            width={600}
+            width={500}
             height={200}
           />
           <div className="p-4">
