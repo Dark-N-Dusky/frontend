@@ -190,12 +190,14 @@ export default function Home() {
           <div className="p-4">
             <p className="text-2xl font-bold">Gifts for Him</p>
             <p>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-              Inventore doloribus id pariatur facilis qui voluptas ipsum,
-              molestiae, neque earum, repudiandae fugiat atque doloremque. Quas
-              rerum obcaecati, sed ab accusamus quasi id molestias provident
-              aliquid non ducimus dolorum necessitatibus beatae deserunt
-              molestiae veniam expedita cumque laboriosam commodi, aliquam
+              Discover the perfect gift for him with our premium collection of
+              leather products, crafted for style, durability, and everyday
+              elegance. From classic belts and wallets to sophisticated
+              accessories, each piece combines timeless design with superior
+              craftsmanship, making it a thoughtful and lasting gift. Whether
+              it’s for a birthday, anniversary, or just because, our leather
+              essentials are sure to impress and become a cherished part of his
+              wardrobe.
             </p>
             <p className="text-lg my-4">
               Starting @ <span className="bg-red-600">Rs. 199</span>
@@ -219,12 +221,13 @@ export default function Home() {
           <div className="p-4">
             <p className="text-2xl font-bold">Gifts for Her</p>
             <p>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-              Inventore doloribus id pariatur facilis qui voluptas ipsum,
-              molestiae, neque earum, repudiandae fugiat atque doloremque. Quas
-              rerum obcaecati, sed ab accusamus quasi id molestias provident
-              aliquid non ducimus dolorum necessitatibus beatae deserunt
-              molestiae veniam expedita cumque laboriosam commodi, aliquam
+              Surprise her with timeless elegance from our exquisite collection
+              of leather products. From chic handbags and stylish wallets to
+              refined accessories, each piece is crafted with attention to
+              detail and superior quality, making it a thoughtful and lasting
+              gift. Perfect for birthdays, anniversaries, or any special
+              occasion, our leather essentials combine style, functionality, and
+              luxury—ensuring your gift is as memorable as she is.
             </p>
             <p className="text-lg my-4">
               Starting @ <span className="bg-red-600">Rs. 199</span>
@@ -238,7 +241,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="overflow-hidden w-full bg-neutral-800">
+      {/* <div className="overflow-hidden w-full bg-neutral-800">
         <p className="text-white text-3xl text-center font-bold py-5 bg-black">
           Show Stopper
         </p>
@@ -256,7 +259,7 @@ export default function Home() {
           ))}
         </div>
         <div className="w-full overflow-x-scroll no-scrollbar"></div>
-      </div>
+      </div> */}
 
       <div className="bg-neutral-900 w-full overflow-hidden">
         <p className="text-white text-3xl text-center font-bold py-5">
