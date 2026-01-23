@@ -53,6 +53,7 @@ export default function ReturnItem({
   return (
     <div className="flex flex-col md:flex-row md:mx-10 mx-5 text-white md:mb-2 mb-5 bg-black border border-white hover:bg-gray-900 rounded-lg overflow-hidden">
       <Image
+        unoptimized
         src={imgSrc || ''}
         alt={name || 'Product Image'}
         width={500}

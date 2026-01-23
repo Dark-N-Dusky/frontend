@@ -123,6 +123,7 @@ export default function Home() {
         <div className="flex justify-around flex-wrap">
           <Link href="/product?s=belt" className="m-6">
             <Image
+              unoptimized
               className="rounded-full mb-2 border-[0.3rem] border-white"
               src="https://res.cloudinary.com/dn3jc0m8s/image/upload/v1768319126/belt2-5_kpybbh.jpg"
               alt="Product - Belt"
@@ -133,6 +134,7 @@ export default function Home() {
           </Link>
           <Link href="/product?s=wallet" className="m-6">
             <Image
+              unoptimized
               className="rounded-full mb-2 border-[0.3rem] border-white"
               src="https://res.cloudinary.com/dn3jc0m8s/image/upload/v1768319481/p1_aw071p.png"
               alt="Product - Wallet"
@@ -143,6 +145,7 @@ export default function Home() {
           </Link>
           {/* <Link href="/product" className="m-6">
             <Image
+              unoptimized
               className="rounded-full mb-2 border-[0.3rem] border-white"
               src="/belt2-5.jpg"
               alt="Product - Belt"
@@ -153,6 +156,7 @@ export default function Home() {
           </Link>
           <Link href="/product" className="m-6">
             <Image
+              unoptimized
               className="rounded-full mb-2 border-[0.3rem] border-white"
               src="/belt2-5.jpg"
               alt="Product - Belt"
@@ -163,6 +167,7 @@ export default function Home() {
           </Link> */}
           <Link href="/product" className="m-6">
             <Image
+              unoptimized
               className="rounded-full mb-2 border-[0.3rem] border-white"
               src="https://res.cloudinary.com/dn3jc0m8s/image/upload/v1768319366/leather-products_jambcv.jpg"
               alt="Product - All"

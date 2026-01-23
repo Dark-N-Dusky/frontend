@@ -133,6 +133,7 @@ export default function Order({
           className="flex flex-col md:flex-row text-white mx-2 my-4 bg-black border border-white hover:bg-gray-900 rounded-lg overflow-hidden"
         >
           <Image
+            unoptimized
             src={fallbackImgSrcs[product.name] || product.media[0] || ''}
             alt={product.name || 'Product Image'}
             width={500}

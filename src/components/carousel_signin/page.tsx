@@ -35,6 +35,7 @@ const Carousel = () => {
     <div className="relative h-[110vh] mx-auto rounded-l-2xl overflow-hidden bg-gray-100">
       {images.map((item, index) => (
         <Image
+          unoptimized
           key={index}
           src={item}
           className={`absolute top-0 left-0 w-full h-full object-cover transition-all duration-500 rounded-l-2xl transform ${

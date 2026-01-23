@@ -6,7 +6,7 @@ import { AuthProvider } from './context/authContext';
 
 export const metadata: Metadata = {
   title: 'Dark & Dusky',
-  description: 'Genuine Leather Products',
+  description: 'Dark & Dusky - Genuine leather products',
 };
 
 export default function RootLayout({

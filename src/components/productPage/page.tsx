@@ -61,6 +61,7 @@ export default function ProductPage({
   return (
     <div className="flex flex-col w-full md:w-1/5 bg-black text-white m-2 rounded-xl overflow-hidden shadow md:hover:scale-105 transition-all">
       <Image
+        unoptimized
         src={imgSrc}
         alt=""
         height={500}
