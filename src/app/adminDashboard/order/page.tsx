@@ -15,6 +15,7 @@ export default function adminOrdersDashboard() {
       status: string;
       tracking_status: string;
       createdAt: string;
+      sizeSelected: string;
     }[]
   >([]);
   const api = process.env.NEXT_PUBLIC_API;
@@ -98,7 +99,12 @@ export default function adminOrdersDashboard() {
         <tbody>
           {filteredOrders.map((order, index) => (
             <tr key={index} className="hover:bg-neutral-700">
-              <td className="border px-4 py-2">{order.id ?? 'NA'}</td>
+              <td className="border px-4 py-2">
+                {order.id ?? 'NA'}
+                <span className="ml-2 px-2 py-1 bg-gray-200 text-xs rounded-full">
+                  Size: {order.sizeSelected}
+                </span>
+              </td>
               <td className="border px-4 py-2">{order.status}</td>
               <td className="border px-4 py-2">{order.tracking_status}</td>
               <td className="border px-4 py-2">

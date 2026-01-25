@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { use } from 'react';
 import Carousel from '@/components/carousel/page';
 import RatingStar from '@/components/ratingStar/page';
+import SizeChartModal from '@/components/sizeChartModal';
 import { JSX } from '@emotion/react/jsx-runtime';
 import Link from 'next/link';
 import axios from 'axios';
@@ -57,6 +58,8 @@ export default function ProductPage({ params }: Props) {
   const api = process.env.NEXT_PUBLIC_API;
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [isChartOpen, setIsChartOpen] = useState(false);
+  const [selectedSize, setSelectedSize] = useState('');
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -82,8 +85,17 @@ export default function ProductPage({ params }: Props) {
     if (!authLoading && !user?.token) {
       router.push('/login');
     } else {
+      if (!selectedSize) {
+        alert('Please select a size');
+        return;
+      }
+
       try {
-        const data = { product_id: pid, quantity: '1' };
+        const data = {
+          product_id: pid,
+          quantity: '1',
+          sizeSelected: selectedSize,
+        };
         const res = await axios.post(`${api}/cart`, data, {
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -212,6 +224,38 @@ export default function ProductPage({ params }: Props) {
           </div>
         </div>
       </div>
+      {/* Size Selector */}
+      <div className="mt-6">
+        <div className="flex justify-between items-center mb-2">
+          <span className="font-semibold">Select Size:</span>
+          <button
+            onClick={() => setIsChartOpen(true)}
+            className="text-sm underline text-blue-600 hover:text-blue-800"
+          >
+            Size Chart
+          </button>
+        </div>
+
+        <div className="flex gap-2">
+          {['S', 'M', 'L', 'XL'].map((size) => (
+            <button
+              key={size}
+              onClick={() => setSelectedSize(size)}
+              className={`border px-4 py-2 rounded ${
+                selectedSize === size
+                  ? 'bg-black text-white border-black'
+                  : 'bg-white text-black border-gray-300 hover:border-black'
+              }`}
+            >
+              {size}
+            </button>
+          ))}
+        </div>
+      </div>
+      <SizeChartModal
+        isOpen={isChartOpen}
+        onClose={() => setIsChartOpen(false)}
+      />
       <div className="p-4">
         <p className="text-lg font-semibold whitespace-pre-line text-center md:text-start bg-zinc-600 p-3 rounded-md md:my-4 mb-4">
           Product Details

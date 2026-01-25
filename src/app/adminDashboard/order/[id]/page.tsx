@@ -19,6 +19,7 @@ type OrderResponse = {
     status: string;
     tracking_status: string;
     createdAt: string;
+    selectedSize: string;
   };
   orderItems: {
     id: number;
@@ -65,7 +66,7 @@ export default function OrderDetails({ params }: Props) {
   const [orderDetails, setOrderDetails] = useState<OrderResponse | null>(null);
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const [productDetails, setProductDetails] = useState<
-    { name: string; quantity: number; price: number }[]
+    { name: string; quantity: number; price: number; selectedSize: string }[]
   >([]);
   const [total, setTotal] = useState(0);
 
@@ -130,12 +131,14 @@ export default function OrderDetails({ params }: Props) {
         const products = productQueries.map((res, index) => {
           const price = res.data.product.price;
           const quantity = orderDetails.orderItems[index].quantity;
+          const size = orderDetails.order.selectedSize;
           orderTotal += price * quantity;
 
           return {
             name: res.data.product.name,
             price: price,
             quantity: quantity,
+            selectedSize: size,
           };
         });
 
@@ -278,6 +281,7 @@ export default function OrderDetails({ params }: Props) {
           <tr>
             <th className="border-2 p-2">Product Name</th>
             <th className="border-2 p-2">Quantity</th>
+            <th className="border-2 p-2">Size</th>
             <th className="border-2 p-2">Amount</th>
           </tr>
         </thead>
@@ -286,6 +290,7 @@ export default function OrderDetails({ params }: Props) {
             <tr key={index} className="border-2">
               <td className="border-2 p-2">{product.name}</td>
               <td className="border-2 p-2">{product.quantity}</td>
+              <td className="border-2 p-2">{product.selectedSize}</td>
               <td className="border-2 p-2">
                 {product.quantity * product.price}
               </td>
