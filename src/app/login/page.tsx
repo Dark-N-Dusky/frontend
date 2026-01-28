@@ -138,12 +138,12 @@ export default function LoginPage() {
               Remember Me
             </label>
 
-            {/* <Link
+            <Link
               className="block underline mb-5 text-lg text-white italic"
               href="/forgot-password"
             >
               Forgot Password?
-            </Link> */}
+            </Link>
 
             {error.invalid && (
               <p className="text-red-500 mb-4">{error.invalid}</p>
