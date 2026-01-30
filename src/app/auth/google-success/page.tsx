@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../../context/authContext'; // Adjust import path
 
-export default function GoogleSuccess() {
+function GoogleSignIn() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { login } = useAuth();
@@ -38,5 +38,13 @@ export default function GoogleSuccess() {
     <div className="h-screen flex items-center justify-center bg-neutral-900 text-white">
       <p>Logging you in...</p>
     </div>
+  );
+}
+
+export default function GoogleSuccess() {
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+      <GoogleSignIn />
+    </Suspense>
   );
 }
