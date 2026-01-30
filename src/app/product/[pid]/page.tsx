@@ -85,7 +85,7 @@ export default function ProductPage({ params }: Props) {
     if (!authLoading && !user?.token) {
       router.push('/login');
     } else {
-      if (!selectedSize) {
+      if (product?.sizes && product.sizes.length > 0 && !selectedSize) {
         alert('Please select a size');
         return;
       }
@@ -94,7 +94,7 @@ export default function ProductPage({ params }: Props) {
         const data = {
           product_id: pid,
           quantity: '1',
-          sizeSelected: selectedSize,
+          sizeSelected: selectedSize || undefined,
         };
         const res = await axios.post(`${api}/cart`, data, {
           headers: {
@@ -161,13 +161,51 @@ export default function ProductPage({ params }: Props) {
           <p className="line-through text-red-400">&#8377;{product.price}</p>
           <p className="text-2xl pb-1 border-b">&#8377;{product.offer_price}</p>
           <p className="my-4">{product.description}</p>
+          {/* Size Selector */}
+          {product.sizes && product.sizes.length > 0 && (
+            <div className="mt-6 mb-4">
+              <div className="flex justify-between items-center mb-2">
+                <span className="font-semibold">Select Size</span>
+                <button
+                  onClick={() => setIsChartOpen(true)}
+                  className="border-blue-600 bg-blue-200 rounded border px-2 text-blue-800 hover:text-blue-950"
+                >
+                  Size Chart
+                </button>
+              </div>
+
+              <div className="flex gap-3 flex-wrap">
+                {product.sizes.map((size: string) => (
+                  <button
+                    key={size}
+                    onClick={() => setSelectedSize(size)}
+                    className={`px-4 py-2 rounded-full border transition ${
+                      selectedSize === size
+                        ? 'bg-white text-black border-white font-semibold'
+                        : 'bg-transparent text-gray-300 border-gray-600 hover:border-gray-400'
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+              <SizeChartModal
+                isOpen={isChartOpen}
+                onClose={() => setIsChartOpen(false)}
+              />
+            </div>
+          )}
           <div className="flex flex-col md:flex-row">
             {user?.role !== 'admin' && (
               <>
                 {!addedToCart && (
                   <button
-                    className="md:w-full m-2 border border-orange-400 p-2 rounded-md hover:bg-orange-400 hover:text-black"
                     onClick={handleAddToCart}
+                    className={`md:w-full m-2 border p-2 rounded-md transition ${
+                      product.sizes?.length > 0 && !selectedSize
+                        ? 'border-gray-500 text-gray-400 cursor-not-allowed'
+                        : 'border-orange-400 hover:bg-orange-400 hover:text-black'
+                    }`}
                   >
                     Add To Cart
                   </button>
@@ -224,38 +262,6 @@ export default function ProductPage({ params }: Props) {
           </div>
         </div>
       </div>
-      {/* Size Selector */}
-      <div className="mt-6">
-        <div className="flex justify-between items-center mb-2">
-          <span className="font-semibold">Select Size:</span>
-          <button
-            onClick={() => setIsChartOpen(true)}
-            className="text-sm underline text-blue-600 hover:text-blue-800"
-          >
-            Size Chart
-          </button>
-        </div>
-
-        <div className="flex gap-2">
-          {['S', 'M', 'L', 'XL'].map((size) => (
-            <button
-              key={size}
-              onClick={() => setSelectedSize(size)}
-              className={`border px-4 py-2 rounded ${
-                selectedSize === size
-                  ? 'bg-black text-white border-black'
-                  : 'bg-white text-black border-gray-300 hover:border-black'
-              }`}
-            >
-              {size}
-            </button>
-          ))}
-        </div>
-      </div>
-      <SizeChartModal
-        isOpen={isChartOpen}
-        onClose={() => setIsChartOpen(false)}
-      />
       <div className="p-4">
         <p className="text-lg font-semibold whitespace-pre-line text-center md:text-start bg-zinc-600 p-3 rounded-md md:my-4 mb-4">
           Product Details
@@ -284,8 +290,12 @@ export default function ProductPage({ params }: Props) {
           <div className="flex flex-col md:flex-row">
             {!addedToCart && (
               <button
-                className="md:w-full border mb-2 md:me-4 md:m-0 border-orange-400 p-2 rounded-md hover:bg-orange-400 hover:text-black cursor-pointer"
                 onClick={handleAddToCart}
+                className={`md:w-full m-2 border p-2 rounded-md transition ${
+                  product.sizes?.length > 0 && !selectedSize
+                    ? 'border-gray-500 text-gray-400 cursor-not-allowed'
+                    : 'border-orange-400 hover:bg-orange-400 hover:text-black'
+                }`}
               >
                 Add To Cart
               </button>

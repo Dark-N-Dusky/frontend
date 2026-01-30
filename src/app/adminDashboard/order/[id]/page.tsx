@@ -19,7 +19,7 @@ type OrderResponse = {
     status: string;
     tracking_status: string;
     createdAt: string;
-    selectedSize: string;
+    selectedSize?: string;
   };
   orderItems: {
     id: number;
@@ -131,7 +131,7 @@ export default function OrderDetails({ params }: Props) {
         const products = productQueries.map((res, index) => {
           const price = res.data.product.price;
           const quantity = orderDetails.orderItems[index].quantity;
-          const size = orderDetails.order.selectedSize;
+          const size = orderDetails.order.selectedSize || 'NA';
           orderTotal += price * quantity;
 
           return {

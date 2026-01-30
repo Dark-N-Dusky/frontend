@@ -10,6 +10,7 @@ export const GET_PRODUCT = gql`
       price
       offer_price
       details
+      sizes
       top_points
       gallery {
         image_url

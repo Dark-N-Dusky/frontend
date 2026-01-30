@@ -9,6 +9,8 @@ import client from '@/lib/apolloClient';
 import { GET_PRODUCT } from '@/queries/getProductDetails';
 
 function ManageProductPageComponent() {
+  const SIZE_REQUIRED_CATEGORIES = ['belt', 'apparel'];
+  const AVAILABLE_SIZES = ['S', 'M', 'L', 'XL', 'XXL'];
   const params = useSearchParams();
   const pid = useMemo(() => params.get('pid')?.toLowerCase() || '', [params]);
   const router = useRouter();
@@ -23,6 +25,7 @@ function ManageProductPageComponent() {
     offer: 0.0,
     detail: '',
     gallery: [] as File[],
+    sizes: [] as string[],
   });
 
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
@@ -57,6 +60,7 @@ function ManageProductPageComponent() {
               price: parseFloat(product.price || 0),
               offer: parseFloat(product.offer_price || 0),
               detail: product.details || '',
+              sizes: product.sizes || [],
             }));
 
             const imgUrls = product.media || [];
@@ -77,6 +81,22 @@ function ManageProductPageComponent() {
 
     fetchProduct();
   }, [pid]);
+
+  const handleSizeToggle = (size: string) => {
+    setFormData((prev) => {
+      const exists = prev.sizes.includes(size);
+      return {
+        ...prev,
+        sizes: exists
+          ? prev.sizes.filter((s) => s !== size)
+          : [...prev.sizes, size],
+      };
+    });
+  };
+
+  const requiresSize = SIZE_REQUIRED_CATEGORIES.includes(
+    formData.category.toLowerCase()
+  );
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -124,6 +144,7 @@ function ManageProductPageComponent() {
         form.append('price', formData.price.toString());
         form.append('offer_price', formData.offer.toString());
         form.append('details', formData.detail);
+        form.append('sizes', JSON.stringify(formData.sizes));
 
         formData.images.forEach((file) => form.append('media', file));
         formData.gallery.forEach((file) => form.append('gallery', file));
@@ -177,6 +198,7 @@ function ManageProductPageComponent() {
       offer: 0.0,
       detail: '',
       gallery: [],
+      sizes: [],
     });
     setImagePreviews([]);
     setGalleryPreviews([]);
@@ -337,6 +359,28 @@ function ManageProductPageComponent() {
             rows={5}
           />
         </div>
+
+        {requiresSize && (
+          <div className={inputDivClassName}>
+            <label className="block mb-2">Available Sizes</label>
+            <div className="flex gap-2 flex-wrap">
+              {AVAILABLE_SIZES.map((size) => (
+                <button
+                  key={size}
+                  type="button"
+                  onClick={() => handleSizeToggle(size)}
+                  className={`px-4 py-2 rounded-full border text-sm transition ${
+                    formData.sizes.includes(size)
+                      ? 'bg-green-500 text-black border-green-500 font-semibold'
+                      : 'bg-transparent text-gray-300 border-gray-500 hover:border-gray-300'
+                  }`}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* GALLERY Upload */}
         <div className={inputDivClassName}>
