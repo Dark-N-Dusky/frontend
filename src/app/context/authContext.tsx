@@ -1,6 +1,12 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from 'react';
 import { useRouter } from 'next/navigation';
 
 type User = {
@@ -33,12 +39,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setLoading(false);
   }, []);
 
-  const login = (userData: User) => {
+  // FIX: Wrap login in useCallback to prevent infinite loops
+  const login = useCallback((userData: User) => {
     localStorage.setItem('user', JSON.stringify(userData));
     setUser(userData);
-  };
+  }, []); // Empty dependency array means this function never changes
 
-  const logout = async () => {
+  // FIX: Wrap logout in useCallback as well
+  const logout = useCallback(async () => {
     const api = process.env.NEXT_PUBLIC_API;
 
     try {
@@ -54,11 +62,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.error('Logout API failed:', error);
     }
 
-    // Clear local and state
     localStorage.removeItem('user');
     setUser(null);
     router.push('/');
-  };
+  }, [user?.token, router]); // Re-create only if user token changes
 
   return (
     <AuthContext.Provider value={{ user, login, logout, loading }}>

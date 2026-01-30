@@ -18,6 +18,7 @@ type LoginResponse = {
 };
 
 export default function LoginPage() {
+  const api = process.env.NEXT_PUBLIC_API;
   const router = useRouter();
   const { login, user } = useAuth();
   const [email, setEmail] = useState('');
@@ -158,6 +159,23 @@ export default function LoginPage() {
 
             <hr className="my-4" />
             <p className="text-center text-lg mb-3 text-white">OR</p>
+            <button
+              type="button" // Important: type="button" to prevent form submission
+              className="bg-white text-black rounded-md mb-3 px-3 py-2 w-full text-lg border-2 border-white hover:bg-gray-200 flex items-center justify-center gap-2"
+              onClick={() => {
+                // Navigate the browser to the backend Google endpoint
+                window.location.href = `${api}/auth/google`;
+              }}
+            >
+              {/* You can add a Google Icon SVG here */}
+              <svg className="w-5 h-5" viewBox="0 0 24 24">
+                <path
+                  fill="currentColor"
+                  d="M21.35,11.1H12.18V13.83H18.69C18.36,17.64 15.19,19.27 12.19,19.27C8.36,19.27 5,16.25 5,12.61C5,8.86 8.21,5.87 12.04,5.87C13.22,5.87 14.24,6.26 15.09,7.03L17.15,5C15.8,3.75 13.92,3.15 11.96,3.15C7.03,3.15 3,7.11 3,12C3,16.89 7.03,20.85 11.96,20.85C16.92,20.85 20.96,17.29 20.96,12C20.96,11.75 20.96,11.39 20.96,11.1C21.36,11.1 21.35,11.1 21.35,11.1Z"
+                />
+              </svg>
+              Sign in with Google
+            </button>
             <Link
               href="/signin"
               className="bg-black rounded-md px-3 py-1 mb-7 block w-full text-white text-lg border-2 border-white hover:text-black hover:bg-white text-center"
