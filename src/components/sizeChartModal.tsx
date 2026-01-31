@@ -48,7 +48,7 @@ export default function SizeChartModal({
               <td className="p-2">107</td>
             </tr>
             <tr className="border-b even:bg-white odd:bg-gray-100">
-              <td className="p-2">2XL</td>
+              <td className="p-2">XXL</td>
               <td className="p-2">44</td>
               <td className="p-2">112</td>
             </tr>

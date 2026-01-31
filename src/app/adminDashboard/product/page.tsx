@@ -10,7 +10,7 @@ import { GET_PRODUCT } from '@/queries/getProductDetails';
 
 function ManageProductPageComponent() {
   const SIZE_REQUIRED_CATEGORIES = ['belt', 'apparel'];
-  const AVAILABLE_SIZES = ['S', 'M', 'L', 'XL', 'XXL'];
+  const AVAILABLE_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', '4XL'];
   const params = useSearchParams();
   const pid = useMemo(() => params.get('pid')?.toLowerCase() || '', [params]);
   const router = useRouter();
