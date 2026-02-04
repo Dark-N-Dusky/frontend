@@ -15,6 +15,7 @@ interface Product {
   price: number;
   offer_price: number;
   category: string;
+  sizes?: string[];
 }
 
 function SearchComponent() {
@@ -88,6 +89,7 @@ function SearchComponent() {
             description={product.description}
             price={product.price}
             offer_price={product.offer_price}
+            sizes={product.sizes}
           />
         ))}
       </div>

@@ -5,6 +5,19 @@ import { useAuth } from '../context/authContext';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
+type AddressData = {
+  name: string;
+  line1: string;
+  line2: string;
+  city: string;
+  state: string;
+  code: string;
+  number: string;
+  alternate_number?: string | null;
+  type: 'home' | 'office';
+  weekend_availability: string;
+};
+
 export default function SaveNewAddress() {
   const inputClass = 'border border-black rounded w-full text-black p-2';
   const labelClass = 'block pt-4 pb-1';
@@ -12,7 +25,7 @@ export default function SaveNewAddress() {
   const router = useRouter();
   const { user } = useAuth();
 
-  const [addressData, setAddressData] = useState({
+  const [addressData, setAddressData] = useState<AddressData>({
     name: '',
     line1: '',
     line2: '',
@@ -20,7 +33,6 @@ export default function SaveNewAddress() {
     state: '',
     code: '',
     number: '',
-    alternate_number: '',
     type: 'home',
     weekend_availability: 'true',
   });
@@ -47,7 +59,11 @@ export default function SaveNewAddress() {
         router.push('/profile');
       }
     } catch (error) {
-      console.error('Failed to save address:', error);
+      if (axios.isAxiosError(error)) {
+        console.log(error.response?.data);
+      } else {
+        console.error('Failed to save address:', error);
+      }
     }
   };
   return (
@@ -188,7 +204,7 @@ export default function SaveNewAddress() {
         id="alternate_number"
         className={inputClass}
         onChange={handleChange}
-        value={addressData.alternate_number}
+        value={addressData.alternate_number || undefined}
       />
 
       <label htmlFor="type" className={labelClass}>

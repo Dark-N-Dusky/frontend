@@ -112,6 +112,23 @@ export default function ProductPage({ params }: Props) {
     }
   };
 
+  const handleBuyNow = () => {
+    if (!authLoading && !user?.token) {
+      router.push('/login');
+      return;
+    }
+
+    if (product?.sizes && product.sizes.length > 0 && !selectedSize) {
+      alert('Please select a size');
+      return;
+    }
+
+    const sizeParam = selectedSize
+      ? `&size=${encodeURIComponent(selectedSize)}`
+      : '';
+    router.push(`/cart/checkout?pid=${pid}${sizeParam}`);
+  };
+
   const handleDeleteProduct = async () => {
     if (confirm('Are you sure you want to delete this product?')) {
       try {
@@ -211,12 +228,12 @@ export default function ProductPage({ params }: Props) {
                   </button>
                 )}
                 {!addedToCart && (
-                  <Link
-                    href={`/cart/checkout?pid=${pid}`}
+                  <button
+                    onClick={handleBuyNow}
                     className="md:w-full m-2 bg-orange-400 hover:bg-orange-500 text-black rounded-md p-2 text-center"
                   >
                     Buy Now
-                  </Link>
+                  </button>
                 )}
                 {addedToCart && (
                   <Link
@@ -301,12 +318,12 @@ export default function ProductPage({ params }: Props) {
               </button>
             )}
             {!addedToCart && (
-              <Link
-                href={`/cart/checkout?pid=${pid}`}
+              <button
+                onClick={handleBuyNow}
                 className="md:w-full text-center md:m-0 my-4 mt-2 bg-orange-400 hover:bg-orange-500 text-black rounded-md p-2 cursor-pointer"
               >
                 Buy Now
-              </Link>
+              </button>
             )}
             {addedToCart && (
               <Link

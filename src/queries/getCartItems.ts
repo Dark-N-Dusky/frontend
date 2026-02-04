@@ -6,6 +6,7 @@ export const GET_CART_ITEMS = gql`
       cart {
         product_id
         quantity
+        sizeSelected
       }
     }
   }

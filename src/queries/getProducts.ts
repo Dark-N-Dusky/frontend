@@ -10,6 +10,7 @@ export const GET_PRODUCTS = gql`
       price
       offer_price
       category
+      sizes
     }
   }
 `;

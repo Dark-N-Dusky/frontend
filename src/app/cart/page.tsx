@@ -32,8 +32,9 @@ export default function Cart() {
     }
   }, [error]);
 
-  const cartItems: { product_id: string; quantity: number }[] | undefined =
-    data?.user?.cart;
+  const cartItems:
+    | { product_id: string; quantity: number; sizeSelected?: string }[]
+    | undefined = data?.user?.cart;
 
   useEffect(() => {
     const fetchPrices = async () => {
@@ -97,6 +98,7 @@ export default function Cart() {
               key={index}
               productId={item.product_id}
               quantity={item.quantity}
+              sizeSelected={item.sizeSelected}
             />
           ))
         ) : (

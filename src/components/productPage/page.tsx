@@ -1,7 +1,6 @@
 'use client';
 
 import { useAuth } from '@/app/context/authContext';
-import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -14,6 +13,7 @@ interface ProductPageProps {
   description: string;
   price: number;
   offer_price: number;
+  sizes?: string[];
 }
 
 export default function ProductPage({
@@ -23,32 +23,22 @@ export default function ProductPage({
   description,
   price,
   offer_price,
+  sizes,
 }: ProductPageProps) {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
-  const api = process.env.NEXT_PUBLIC_API;
   const [imgSrc, setImgSrc] = useState(media[0]);
-  const [addedToCart, setAddedToCart] = useState(false);
 
-  const handleAddToCart = async () => {
+  const handleBuyNow = async () => {
     if (!authLoading && !user?.token) {
       router.push('/login');
     } else {
-      try {
-        const data = { product_id: pid, quantity: '1' };
-        const res = await axios.post(`${api}/cart`, data, {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
-        });
-        if (res.status === 201) {
-          setAddedToCart(true);
-        } else {
-          console.error('Error adding to cart');
-        }
-      } catch (err) {
-        console.error(err);
+      if (sizes && sizes.length > 0) {
+        router.push(`/product/${pid}`);
+        return;
       }
+
+      router.push(`/cart/checkout?pid=${pid}`);
     }
   };
 
@@ -94,23 +84,13 @@ export default function ProductPage({
           </Link>
         ) : (
           <>
-            {!addedToCart && (
-              <button
-                className="border-orange-400 border w-full p-3 my-2 mt-8 rounded-md hover:bg-orange-400 hover:text-black"
-                onClick={handleAddToCart}
-                id={pid}
-              >
-                Add to Cart
-              </button>
-            )}
-            {addedToCart && (
-              <Link
-                href="/cart"
-                className="border-green-400 block text-center border w-full p-3 my-2 mt-8 rounded-md hover:bg-green-400 hover:text-black"
-              >
-                View Cart
-              </Link>
-            )}
+            <button
+              className="border-orange-400 border w-full p-3 my-2 mt-8 rounded-md hover:bg-orange-400 hover:text-black"
+              onClick={handleBuyNow}
+              id={pid}
+            >
+              Buy Now
+            </button>
           </>
         )}
       </div>

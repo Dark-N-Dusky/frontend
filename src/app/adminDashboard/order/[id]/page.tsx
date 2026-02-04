@@ -26,6 +26,7 @@ type OrderResponse = {
     quantity: number;
     product_id: string;
     order_id: number;
+    selectedSize: string;
   }[];
 };
 
@@ -131,7 +132,7 @@ export default function OrderDetails({ params }: Props) {
         const products = productQueries.map((res, index) => {
           const price = res.data.product.price;
           const quantity = orderDetails.orderItems[index].quantity;
-          const size = orderDetails.order.selectedSize || 'NA';
+          const size = orderDetails.orderItems[index].selectedSize || 'NA';
           orderTotal += price * quantity;
 
           return {

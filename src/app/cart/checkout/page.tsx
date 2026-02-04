@@ -13,6 +13,7 @@ import { Suspense } from 'react';
 interface CartItem {
   product_id: string;
   quantity: number;
+  sizeSelected?: string;
 }
 
 interface Address {
@@ -34,6 +35,7 @@ function CheckoutClient() {
   const { user, loading } = useAuth();
   const searchParams = useSearchParams();
   const pid = searchParams.get('pid');
+  const sizeSelected = searchParams.get('size');
   const [data, setData] = useState({
     name: '',
     email: '',
@@ -59,7 +61,13 @@ function CheckoutClient() {
   useEffect(() => {
     const getCartItems = async () => {
       if (pid) {
-        const cartItem = [{ product_id: pid, quantity: 1 }];
+        const cartItem = [
+          {
+            product_id: pid,
+            quantity: 1,
+            sizeSelected: sizeSelected || undefined,
+          },
+        ];
         setCartItems(cartItem);
       } else {
         try {
@@ -186,6 +194,7 @@ function CheckoutClient() {
         address_id: selectedAddressIndex.toString(),
         pid,
         quantity: '1',
+        sizeSelected: sizeSelected || undefined,
       };
     } else {
       orderData = { address_id: selectedAddressIndex.toString() };

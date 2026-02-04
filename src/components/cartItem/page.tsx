@@ -12,9 +12,14 @@ import { useRouter } from 'next/navigation';
 interface CartItemProps {
   productId: string;
   quantity: number;
+  sizeSelected?: string;
 }
 
-export default function CartItem({ productId, quantity }: CartItemProps) {
+export default function CartItem({
+  productId,
+  quantity,
+  sizeSelected,
+}: CartItemProps) {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
   const { data, loading, error } = useQuery(GET_PRODUCT_DETAILS, {
@@ -55,7 +60,10 @@ export default function CartItem({ productId, quantity }: CartItemProps) {
       router.push('/login');
     } else {
       try {
-        const res = await axios.delete(`${api}/cart/${productId}`, {
+        const sizeParam = sizeSelected
+          ? `?sizeSelected=${encodeURIComponent(sizeSelected)}`
+          : '';
+        const res = await axios.delete(`${api}/cart/${productId}${sizeParam}`, {
           headers: {
             Authorization: `Bearer ${user?.token}`,
           },
@@ -93,6 +101,7 @@ export default function CartItem({ productId, quantity }: CartItemProps) {
             Amount: &#8377;{price * quantity}
           </p>
           <p>Quantity: {quantity}</p>
+          {sizeSelected && <p>Size: {sizeSelected}</p>}
         </div>
         <div className="md:pt-6 py-2">
           <button
