@@ -96,7 +96,7 @@ export default function ProductPage({ params }: Props) {
           quantity: '1',
           sizeSelected: selectedSize || undefined,
         };
-        const res = await axios.post(`${api}/cart`, data, {
+        const res = await axios.post(`${api}cart`, data, {
           headers: {
             Authorization: `Bearer ${user?.token}`,
           },
