@@ -46,7 +46,8 @@ export default function CartItem({
   if (loading) return <p>Loading product details...</p>;
   if (error) return <p>Error loading product details.</p>;
 
-  const { name, price, description } = data.product;
+  const { name, price, offer_price, description } = data.product;
+  const unitPrice = offer_price ?? price ?? 0;
 
   const handleImgError = () =>
     setImgSrc(
@@ -96,9 +97,9 @@ export default function CartItem({
           {description.match(/(.*?[.!?])\s/)?.[1] || description}
         </p>
         <div className="flex flex-col justify-around w-full md:flex-row my-4">
-          <p>Price: &#8377;{price}</p>
+          <p>Price: &#8377;{unitPrice}</p>
           <p className="bg-orange-600 px-1 w-max">
-            Amount: &#8377;{price * quantity}
+            Amount: &#8377;{unitPrice * quantity}
           </p>
           <p>Quantity: {quantity}</p>
           {sizeSelected && <p>Size: {sizeSelected}</p>}

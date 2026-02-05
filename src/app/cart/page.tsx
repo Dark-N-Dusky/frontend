@@ -57,7 +57,8 @@ export default function Cart() {
       const map: Record<string, number> = {};
 
       results.forEach((res, idx) => {
-        const price = res.data?.product?.price || 0;
+        const price =
+          res.data?.product?.offer_price ?? res.data?.product?.price ?? 0;
         const quantity = cartItems[idx].quantity;
         map[cartItems[idx].product_id] = price;
         total += price * quantity;
