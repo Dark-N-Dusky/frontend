@@ -96,7 +96,7 @@ export default function ProductPage({ params }: Props) {
           quantity: '1',
           sizeSelected: selectedSize || undefined,
         };
-        const res = await axios.post(`${api}cart`, data, {
+        const res = await axios.post(`/cart`, data, {
           headers: {
             Authorization: `Bearer ${user?.token}`,
           },
@@ -107,6 +107,9 @@ export default function ProductPage({ params }: Props) {
           console.error('Error adding to cart');
         }
       } catch (err) {
+        if (axios.isAxiosError(err)) {
+          console.log(err.response?.data);
+        }
         console.error(err);
       }
     }
