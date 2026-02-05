@@ -107,6 +107,9 @@ export default function ProductPage({ params }: Props) {
           console.error('Error adding to cart');
         }
       } catch (err) {
+        if (axios.isAxiosError(err)) {
+          console.log(err.response?.data);
+        }
         console.error(err);
       }
     }
