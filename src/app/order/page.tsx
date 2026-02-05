@@ -34,7 +34,6 @@ export default function Cart() {
           },
         });
         setData(res.data[0]);
-        console.log('Orders:', res.data[0]);
       } catch (error: Error | any) {
         console.error('Error fetching order items:', error);
       }

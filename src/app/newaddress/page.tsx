@@ -59,11 +59,7 @@ export default function SaveNewAddress() {
         router.push('/profile');
       }
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log(error.response?.data);
-      } else {
-        console.error('Failed to save address:', error);
-      }
+      console.error('Failed to save address:', error);
     }
   };
   return (

@@ -54,7 +54,6 @@ export default function Order({
             Authorization: `Bearer ${user?.token}`,
           },
         });
-        console.log('Order:', res.data);
         setOrderItems(res.data.orderItem);
       } catch (error) {
         console.error('Error fetching order items:', error);
