@@ -56,7 +56,8 @@ function CheckoutClient() {
   const [subtotal, setSubtotal] = useState(0);
   const [pricesMap, setPricesMap] = useState<Record<string, number>>({});
   const [savedAddresses, setSavedAddresses] = useState<Address[]>([]);
-  const [selectedAddressIndex, setSelectedAddressIndex] = useState(0);
+  const [selectedAddressIndex, setSelectedAddressIndex] = useState<number>(-1);
+  const hasSavedAddress = savedAddresses.length > 0;
 
   useEffect(() => {
     const getCartItems = async () => {
@@ -133,6 +134,7 @@ function CheckoutClient() {
             email: userData?.email || '',
             cno: userData?.number || '',
           }));
+          setSelectedAddressIndex(-1);
         }
       } catch (err) {
         console.error('Failed to fetch user data:', err);
@@ -189,6 +191,12 @@ function CheckoutClient() {
   const cartTotal = Math.round(subtotal + delivery + tax);
 
   const handleSubmit = async () => {
+    if (selectedAddressIndex < 0 || !savedAddresses[selectedAddressIndex]) {
+      alert('Please add an address before placing your order.');
+      router.push('/newaddress');
+      return;
+    }
+
     let orderData = {};
     if (pid) {
       orderData = {
@@ -277,7 +285,7 @@ function CheckoutClient() {
           <p className="text-xl text-center my-3 border-b pb-3">
             Saved Addresses
           </p>
-          {savedAddresses.length > 0 ? (
+          {hasSavedAddress ? (
             <div className="space-y-4">
               {savedAddresses.map((addr, idx) => (
                 <div
@@ -319,7 +327,11 @@ function CheckoutClient() {
               ))}
             </div>
           ) : (
-            <p className="text-gray-400">No saved addresses found.</p>
+            <div className="rounded-md border border-orange-600 bg-gray-800 p-4 text-center">
+              <p className="text-gray-200">
+                Please add a delivery address to place your order.
+              </p>
+            </div>
           )}
           <div className="my-4 p-4 text-center">
             <Link
@@ -361,8 +373,13 @@ function CheckoutClient() {
         </div>
 
         <button
-          className="block w-full text-center border border-green-700 hover:bg-green-700 p-3 rounded-md mt-6 my-2"
+          className={`block w-full text-center border border-green-700 p-3 rounded-md mt-6 my-2 ${
+            hasSavedAddress
+              ? 'hover:bg-green-700'
+              : 'cursor-not-allowed opacity-60'
+          }`}
           onClick={handleSubmit}
+          disabled={!hasSavedAddress}
         >
           Order Now
         </button>
