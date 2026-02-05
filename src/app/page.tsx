@@ -103,12 +103,7 @@ const reviews = [
 ];
 
 export default function Home() {
-  const images = [
-    'https://res.cloudinary.com/dn3jc0m8s/image/upload/v1768318740/img2_pap23w.png',
-    'https://res.cloudinary.com/dn3jc0m8s/image/upload/v1768318689/img4_bc38dl.png',
-    'https://res.cloudinary.com/dn3jc0m8s/image/upload/v1768318687/img3_l4yhnk.png',
-    'https://res.cloudinary.com/dn3jc0m8s/image/upload/v1768318735/img1_b087do.png',
-  ];
+  const images = ['/hero1.png', '/hero2.png', '/hero3.png', '/hero4.png'];
   return (
     <div className="w-full overflow-x-hidden bg-black">
       <Carousel images={images} divHeightMd="150vh" divHeightNormal="80vh" />
