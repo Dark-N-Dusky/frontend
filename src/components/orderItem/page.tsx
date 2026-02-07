@@ -7,6 +7,7 @@ import client from '@/lib/apolloClient';
 import axios from 'axios';
 import { useAuth } from '@/app/context/authContext';
 import { useRouter } from 'next/navigation';
+import ConfirmModal from '@/components/confirmModal';
 
 interface OrderProps {
   id: number;
@@ -49,6 +50,11 @@ export default function Order({
   const [fallbackImgSrcs, setFallbackImgSrcs] = useState<
     Record<string, string>
   >({});
+  const [confirmAction, setConfirmAction] = useState<
+    | { type: 'cancel' }
+    | { type: 'return'; productId: string; productName?: string }
+    | null
+  >(null);
 
   useEffect(() => {
     setCurrentStatus(status);
@@ -164,6 +170,17 @@ export default function Order({
     }
   };
 
+  const handleConfirmAction = async () => {
+    if (!confirmAction) return;
+    const action = confirmAction;
+    setConfirmAction(null);
+    if (action.type === 'cancel') {
+      await handleCancel();
+      return;
+    }
+    await handleReturn(action.productId);
+  };
+
   return (
     <div className="border rounded-lg p-2 md:mx-6 mx-5 md:my-2 my-5 text-white bg-gray-950">
       <div className="flex flex-col md:flex-row justify-between">
@@ -204,7 +221,13 @@ export default function Order({
             </div>
             {isReturnEligible() && (
               <button
-                onClick={() => handleReturn(product.id)}
+                onClick={() =>
+                  setConfirmAction({
+                    type: 'return',
+                    productId: product.id,
+                    productName: product.name,
+                  })
+                }
                 className="mt-4 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded"
               >
                 Return
@@ -227,7 +250,7 @@ export default function Order({
         </p>
         {isCancelable() && (
           <button
-            onClick={handleCancel}
+            onClick={() => setConfirmAction({ type: 'cancel' })}
             disabled={isCancelling}
             className={`p-2 m-1 text-center border rounded-md bg-red-600 text-white ${
               isCancelling
@@ -239,6 +262,30 @@ export default function Order({
           </button>
         )}
       </div>
+
+      <ConfirmModal
+        isOpen={!!confirmAction}
+        title={
+          confirmAction?.type === 'cancel'
+            ? 'Are you sure you want to cancel this order?'
+            : 'Are you sure you want to start a return?'
+        }
+        description={
+          confirmAction?.type === 'cancel'
+            ? `This will cancel order #${id}.`
+            : `This will start a return for ${
+                confirmAction?.productName || 'this item'
+              }.`
+        }
+        confirmLabel={
+          confirmAction?.type === 'cancel'
+            ? 'Yes, cancel order'
+            : 'Yes, start return'
+        }
+        cancelLabel="No, go back"
+        onCancel={() => setConfirmAction(null)}
+        onConfirm={handleConfirmAction}
+      />
     </div>
   );
 }
