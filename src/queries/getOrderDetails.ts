@@ -4,7 +4,7 @@ export const GET_ORDER_DETAILS = gql`
   query User($pid: String!) {
     product(pid: $pid) {
       name
-      price
+      offer_price
     }
   }
 `;

@@ -130,7 +130,7 @@ export default function OrderDetails({ params }: Props) {
 
         let orderTotal = 0;
         const products = productQueries.map((res, index) => {
-          const price = res.data.product.price;
+          const price = res.data.product.offer_price;
           const quantity = orderDetails.orderItems[index].quantity;
           const size = orderDetails.orderItems[index].selectedSize || 'NA';
           orderTotal += price * quantity;

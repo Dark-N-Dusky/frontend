@@ -27,7 +27,7 @@ interface ProductDetails {
   description: string;
   media: string[];
   name: string;
-  price: number;
+  offer_price: number;
   quantity: number;
 }
 
@@ -153,7 +153,7 @@ export default function Order({
                 product.description}
             </p>
             <div className="flex flex-col justify-around w-full md:flex-row mt-4">
-              <p>Price: &#8377;{product.price}</p>
+              <p>Price: &#8377;{product.offer_price}</p>
               <p>Quantity: {product.quantity}</p>
             </div>
             {isReturnEligible() && (
