@@ -43,7 +43,7 @@ export default function ReturnItem({
   if (loading) return <p>Loading product details...</p>;
   if (error) return <p>Error loading product details.</p>;
 
-  const { name, price, description } = data.product;
+  const { name, offer_price, description } = data.product;
 
   const handleImgError = () =>
     setImgSrc(
@@ -67,7 +67,7 @@ export default function ReturnItem({
           {description.match(/(.*?[.!?])\s/)?.[1] || description}
         </p>
         <div className="flex flex-col justify-around w-full md:flex-row my-4">
-          <p>Price: &#8377;{price}</p>
+          <p>Price: &#8377;{offer_price}</p>
           <p>OrderID: {orderId}</p>
         </div>
         <div className="md:pt-6 py-2 flex flex-col md:flex-row w-full justify-around">
