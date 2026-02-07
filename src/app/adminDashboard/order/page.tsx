@@ -49,7 +49,7 @@ export default function adminOrdersDashboard() {
       ? orderList
       : orderList.filter((order) => order.status === selectedStatus);
 
-  const statuses = ['All', 'pending', 'confirmed', 'delivered', 'canceled'];
+  const statuses = ['All', 'pending', 'confirmed', 'delivered', 'cancelled'];
 
   const stats = {
     totalOrders: orderList.length,

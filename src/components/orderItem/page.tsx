@@ -42,9 +42,21 @@ export default function Order({
   const router = useRouter();
   const [orderItems, setOrderItems] = useState<OrderItems[]>([]);
   const [products, setProducts] = useState<ProductDetails[]>([]);
+  const [currentStatus, setCurrentStatus] = useState(status);
+  const [currentTrackingStatus, setCurrentTrackingStatus] =
+    useState(trackingStatus);
+  const [isCancelling, setIsCancelling] = useState(false);
   const [fallbackImgSrcs, setFallbackImgSrcs] = useState<
     Record<string, string>
   >({});
+
+  useEffect(() => {
+    setCurrentStatus(status);
+  }, [status]);
+
+  useEffect(() => {
+    setCurrentTrackingStatus(trackingStatus);
+  }, [trackingStatus]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -96,10 +108,44 @@ export default function Order({
     const diffInTime = today.getTime() - orderDate.getTime();
     const diffInDays = diffInTime / (1000 * 3600 * 24);
     return (
-      status.toLowerCase() === 'delivered' &&
-      trackingStatus.toLowerCase() === 'delivered' &&
+      currentStatus.toLowerCase() === 'delivered' &&
+      currentTrackingStatus.toLowerCase() === 'delivered' &&
       diffInDays <= 15
     );
+  };
+
+  const isCancelable = () => {
+    if (currentStatus.toLowerCase() === 'cancelled') return false;
+    const nonCancelableTracking = ['shipped', 'delivery', 'delivered'];
+    return !nonCancelableTracking.includes(
+      currentTrackingStatus.toLowerCase(),
+    );
+  };
+
+  const handleCancel = async () => {
+    if (!user?.token || isCancelling) return;
+    try {
+      setIsCancelling(true);
+      const res = await axios.patch(
+        `${api}/order/${id}/cancel`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        },
+      );
+      if (res?.data?.status) {
+        setCurrentStatus(res.data.status);
+      }
+      if (res?.data?.tracking_status) {
+        setCurrentTrackingStatus(res.data.tracking_status);
+      }
+    } catch (err) {
+      console.error('Error cancelling order: ', err);
+    } finally {
+      setIsCancelling(false);
+    }
   };
 
   const handleReturn = async (productId: string) => {
@@ -170,13 +216,28 @@ export default function Order({
 
       <div className="py-2 flex flex-col md:flex-row w-full justify-around">
         <p className="p-2 m-1 text-center border rounded-md">
-          Status: {status.substring(0, 1).toUpperCase() + status.substring(1)}
+          Status:{' '}
+          {currentStatus.substring(0, 1).toUpperCase() +
+            currentStatus.substring(1)}
         </p>
         <p className="p-2 m-1 text-center border rounded-md">
           Tracking Status:{' '}
-          {trackingStatus.substring(0, 1).toUpperCase() +
-            trackingStatus.substring(1)}
+          {currentTrackingStatus.substring(0, 1).toUpperCase() +
+            currentTrackingStatus.substring(1)}
         </p>
+        {isCancelable() && (
+          <button
+            onClick={handleCancel}
+            disabled={isCancelling}
+            className={`p-2 m-1 text-center border rounded-md bg-red-600 text-white ${
+              isCancelling
+                ? 'opacity-60 cursor-not-allowed'
+                : 'hover:bg-red-700'
+            }`}
+          >
+            {isCancelling ? 'Cancelling...' : 'Cancel Order'}
+          </button>
+        )}
       </div>
     </div>
   );
