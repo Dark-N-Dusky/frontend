@@ -7,7 +7,7 @@ interface CarouselProps {
   divHeightNormal: string;
   divHeightMd: string;
   images: string[]; // md and above
-  imagesMd: string[]; // below md
+  imagesMd?: string[]; // below md (optional)
 }
 
 const Carousel = ({
@@ -31,28 +31,42 @@ const Carousel = ({
     return () => window.removeEventListener('resize', checkScreen);
   }, []);
 
-  const activeImages = isMdUp ? images : imagesMd;
+  // Use imagesMd only if:
+  // - screen is below md
+  // - imagesMd exists
+  // - imagesMd has items
+  const activeImages =
+    !isMdUp && imagesMd && imagesMd.length > 0 ? imagesMd : images;
 
   // Reset index if image set changes
   useEffect(() => {
     setCurrent(0);
-  }, [isMdUp]);
+  }, [isMdUp, imagesMd]);
 
+  // Auto slide
   useEffect(() => {
+    if (!activeImages || activeImages.length === 0) return;
+
     const interval = setInterval(() => {
       setCurrent((prev) => (prev === activeImages.length - 1 ? 0 : prev + 1));
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [activeImages.length]);
+  }, [activeImages]);
 
   const nextSlide = () => {
+    if (!activeImages || activeImages.length === 0) return;
+
     setCurrent((prev) => (prev === activeImages.length - 1 ? 0 : prev + 1));
   };
 
   const prevSlide = () => {
+    if (!activeImages || activeImages.length === 0) return;
+
     setCurrent((prev) => (prev === 0 ? activeImages.length - 1 : prev - 1));
   };
+
+  if (!activeImages || activeImages.length === 0) return null;
 
   return (
     <div
@@ -77,7 +91,7 @@ const Carousel = ({
       <button
         onClick={prevSlide}
         className="absolute left-4 top-1/2 transform -translate-y-1/2 
-             text-3xl text-gray-700 hover:text-black transition-all duration-300"
+        text-3xl text-gray-700 hover:text-black transition-all duration-300"
       >
         ‹
       </button>
@@ -85,7 +99,7 @@ const Carousel = ({
       <button
         onClick={nextSlide}
         className="absolute right-4 top-1/2 transform -translate-y-1/2 
-             text-3xl text-gray-700 hover:text-black transition-all duration-300"
+        text-3xl text-gray-700 hover:text-black transition-all duration-300"
       >
         ›
       </button>
