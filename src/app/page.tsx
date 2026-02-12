@@ -104,9 +104,20 @@ const reviews = [
 
 export default function Home() {
   const images = ['/hero1.png', '/hero2.png', '/hero3.png', '/hero4.png'];
+  const images_md = [
+    '/hero1_portrait.png',
+    '/hero2_portrait.png',
+    '/hero3_portrait.png',
+    '/hero4_portrait.png',
+  ];
   return (
     <div className="w-full overflow-x-hidden bg-black">
-      <Carousel images={images} divHeightMd="150vh" divHeightNormal="80vh" />
+      <Carousel
+        images={images}
+        imagesMd={images_md}
+        divHeightMd="150vh"
+        divHeightNormal="80vh"
+      />
       <h2 className="text-center text-white font-semibold bg-gray-900 p-3 text-2xl uppercase">
         Shop now
       </h2>
