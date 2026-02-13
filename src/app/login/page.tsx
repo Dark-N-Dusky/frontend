@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Carousel_login from '@/components/carousel_login/page';
+import Carousel_login from '@/components/carouselLogin';
 import { useAuth } from '../context/authContext';
 import axios from 'axios';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
@@ -177,7 +177,7 @@ export default function LoginPage() {
               Sign in with Google
             </button>
             <Link
-              href="/signin"
+              href="/register"
               className="bg-black rounded-md px-3 py-1 mb-7 block w-full text-white text-lg border-2 border-white hover:text-black hover:bg-white text-center"
             >
               Register

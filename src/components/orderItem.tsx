@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { GET_PRODUCT_DETAILS } from '../../queries/getCartItems';
+import { GET_PRODUCT_DETAILS } from '@/queries/getCartItems';
 import { useEffect, useState } from 'react';
 import client from '@/lib/apolloClient';
 import axios from 'axios';
@@ -123,9 +123,7 @@ export default function Order({
   const isCancelable = () => {
     if (currentStatus.toLowerCase() === 'cancelled') return false;
     const nonCancelableTracking = ['shipped', 'delivery', 'delivered'];
-    return !nonCancelableTracking.includes(
-      currentTrackingStatus.toLowerCase(),
-    );
+    return !nonCancelableTracking.includes(currentTrackingStatus.toLowerCase());
   };
 
   const handleCancel = async () => {
@@ -139,7 +137,7 @@ export default function Order({
           headers: {
             Authorization: `Bearer ${user?.token}`,
           },
-        },
+        }
       );
       if (res?.data?.status) {
         setCurrentStatus(res.data.status);

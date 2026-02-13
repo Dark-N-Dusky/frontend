@@ -5,7 +5,7 @@ import client from '@/lib/apolloClient';
 import { GET_ORDER_DETAILS, GET_USER_DETAILS } from '@/queries/getOrderDetails';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import PDFGenerator from '@/components/pdfGen/page';
+import PDFGenerator from '@/components/pdfGen';
 
 type Props = {
   params: Promise<{ id: string }>;

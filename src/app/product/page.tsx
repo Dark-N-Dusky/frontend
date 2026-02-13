@@ -1,6 +1,6 @@
 'use client';
 
-import ProductPage from '@/components/productPage/page';
+import ProductPage from '@/components/productPage';
 import { GET_PRODUCTS } from '@/queries/getProducts';
 import { useQuery } from '@apollo/client';
 import client from '@/lib/apolloClient';

@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth } from '../context/authContext';
-import OrderItem from '@/components/orderItem/page';
+import OrderItem from '@/components/orderItem';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';

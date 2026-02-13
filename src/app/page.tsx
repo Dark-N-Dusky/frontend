@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import Carousel from '@/components/carousel/page';
+import Carousel from '@/components/carousel';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
-import ProductPage from '@/components/productPage/page';
+import ProductPage from '@/components/productPage';
 import ReviewsList from '@/components/customerReview';
 
 const showStoppers = [

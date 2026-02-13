@@ -2,7 +2,7 @@
 
 import { useQuery } from '@apollo/client';
 import { useAuth } from '../context/authContext';
-import CartItem from '@/components/cartItem/page';
+import CartItem from '@/components/cartItem';
 import { useEffect, useState } from 'react';
 import { GET_CART_ITEMS, GET_PRODUCT_PRICE } from '@/queries/getCartItems';
 import client from '@/lib/apolloClient';

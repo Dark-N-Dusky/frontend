@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Carousel_signin from '@/components/carousel_signin/page';
+import Carousel_signin from '@/components/carouselRegister';
 import {
   validateName,
   validateEmail,

@@ -2,26 +2,23 @@
 
 import { useQuery } from '@apollo/client';
 import Image from 'next/image';
-import { GET_PRODUCT_DETAILS } from '../../queries/getCartItems';
+import { GET_PRODUCT_DETAILS } from '@/queries/getCartItems';
 import { useEffect, useState } from 'react';
 import client from '@/lib/apolloClient';
-import axios from 'axios';
-import { useAuth } from '@/app/context/authContext';
-import { useRouter } from 'next/navigation';
 
 interface CartItemProps {
   productId: string;
-  quantity: number;
-  sizeSelected?: string;
+  orderId: number;
+  status: string;
+  trackingStatus: string;
 }
 
-export default function CartItem({
+export default function ReturnItem({
   productId,
-  quantity,
-  sizeSelected,
+  orderId,
+  status,
+  trackingStatus,
 }: CartItemProps) {
-  const { user, loading: authLoading } = useAuth();
-  const router = useRouter();
   const { data, loading, error } = useQuery(GET_PRODUCT_DETAILS, {
     client,
     variables: { pid: productId },
@@ -46,39 +43,12 @@ export default function CartItem({
   if (loading) return <p>Loading product details...</p>;
   if (error) return <p>Error loading product details.</p>;
 
-  const { name, price, offer_price, description } = data.product;
-  const unitPrice = offer_price ?? price ?? 0;
+  const { name, offer_price, description } = data.product;
 
   const handleImgError = () =>
     setImgSrc(
       'https://via.assets.so/img.jpg?w=500&h=500&tc=white&bg=grey&t=Image'
     );
-
-  const api = process.env.NEXT_PUBLIC_API || 'localhost';
-
-  const handleRemoveItem = async () => {
-    if (!authLoading && !user?.token) {
-      router.push('/login');
-    } else {
-      try {
-        const sizeParam = sizeSelected
-          ? `?sizeSelected=${encodeURIComponent(sizeSelected)}`
-          : '';
-        const res = await axios.delete(`${api}/cart/${productId}${sizeParam}`, {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
-        });
-        if (res.status === 200) {
-          window.location.reload();
-        } else {
-          console.error('Error removing item from cart');
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  };
 
   return (
     <div className="flex flex-col md:flex-row md:mx-10 mx-5 text-white md:mb-2 mb-5 bg-black border border-white hover:bg-gray-900 rounded-lg overflow-hidden">
@@ -97,20 +67,18 @@ export default function CartItem({
           {description.match(/(.*?[.!?])\s/)?.[1] || description}
         </p>
         <div className="flex flex-col justify-around w-full md:flex-row my-4">
-          <p>Price: &#8377;{unitPrice}</p>
-          <p className="bg-orange-600 px-1 w-max">
-            Amount: &#8377;{unitPrice * quantity}
-          </p>
-          <p>Quantity: {quantity}</p>
-          {sizeSelected && <p>Size: {sizeSelected}</p>}
+          <p>Price: &#8377;{offer_price}</p>
+          <p>OrderID: {orderId}</p>
         </div>
-        <div className="md:pt-6 py-2">
-          <button
-            onClick={handleRemoveItem}
-            className="border rounded-md border-red-600 py-2 px-4 hover:bg-red-600"
-          >
-            Remove item
-          </button>
+        <div className="md:pt-6 py-2 flex flex-col md:flex-row w-full justify-around">
+          <p className="p-2 m-2 text-center border rounded-md">
+            Status: {status.substring(0, 1).toUpperCase() + status.substring(1)}
+          </p>
+          <p className="p-2 m-2 text-center border rounded-md">
+            Tracking Status:{' '}
+            {trackingStatus.substring(0, 1).toUpperCase() +
+              trackingStatus.substring(1)}
+          </p>
         </div>
       </div>
     </div>
