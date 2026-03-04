@@ -108,7 +108,7 @@ export default function ProductPage({ params }: Props) {
         }
       } catch (err) {
         if (axios.isAxiosError(err)) {
-          console.log(err.response?.data);
+          console.error(err.response?.data);
         }
         console.error(err);
       }
