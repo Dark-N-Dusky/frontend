@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import './globals.css';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
 import { AuthProvider } from './context/authContext';
+import RouteChangeLogger from '@/components/routeChangeLogger';
 
 export const metadata: Metadata = {
   title: 'Dark & Dusky',
@@ -18,6 +20,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <AuthProvider>
+          <Suspense fallback={null}>
+            <RouteChangeLogger />
+          </Suspense>
           <Navbar />
           {children}
           <Footer />
